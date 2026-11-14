@@ -1,0 +1,16 @@
+{
+  "type": "Su-27 DTC",
+  "version": 1,
+  "name": "Example comm plan",
+  "terrain": "Caucasus",
+  "ukv": [
+    {"ch": 1, "f": 251.500, "station": "Полёт", "call": "Витязь"},
+    {"ch": 2, "f": 134.000, "station": "Кутаиси", "call": "Кутаиси"},
+    {"ch": 3, "f": 132.000, "station": "Сенаки", "call": "Цокот"},
+    {"ch": 4, "f": 245.000, "station": "КП (GCI)", "call": "Сосна"},
+    {"ch": 5, "f": 246.000, "station": "КП перехват", "call": "Кедр"}
+  ],
+  "kv": [
+    {"ch": 1, "f": 3.500, "station": "Дальняя связь", "call": "Утёс"}
+  ]
+}

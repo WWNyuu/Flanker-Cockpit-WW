@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Su-27 Radio (WW) - radios for the DCS Su-27 / J-11A</title>
+<meta name="description" content="Working radios for the Flaming Cliffs Su-27 and J-11A in DCS: a cartridge loader plate, channel and volume knobs on the УКВ / КВ radio panel tuned in SRS, a handwritten channel card, and the WW DTC Planner.">
+<meta property="og:title" content="Su-27 Radio (WW) - radios for the DCS Su-27 / J-11A">
+<meta property="og:description" content="Working radios for the Flaming Cliffs Su-27 and J-11A in DCS: a cartridge loader plate, channel and volume knobs on the УКВ / КВ radio panel tuned in SRS, a handwritten channel card, and the WW DTC Planner.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="img/outside.jpg">
+<link rel="icon" href="img/outside.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=Share+Tech+Mono&display=swap">
+<style>
+/* Layout: a squadron technical bulletin (same family as the MiG-29 WW MFD site): document-control strip, numbered figure plates (SL.), spec sheet, revision table. */
+:root {
+  --paper: #eceef0;
+  --sheet: #f7f8f9;
+  --ink: #1b2537;
+  --ink-2: #4a5568;
+  --rule: #c5cbd3;
+  --red: #b8323f;
+  --blue: #2f5aa3;
+  --screen: #0b0f12;
+  --display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "Share Tech Mono", ui-monospace, "Consolas", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #10151f; --sheet: #161d2a; --ink: #e3e7ee; --ink-2: #a3adbd; --rule: #2c3647;
+    --red: #e26a74; --blue: #7aa2e6; --screen: #05080a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #10151f; --sheet: #161d2a; --ink: #e3e7ee; --ink-2: #a3adbd; --rule: #2c3647;
+  --red: #e26a74; --blue: #7aa2e6; --screen: #05080a; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font: 16px/1.6 var(--body); margin: 0; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: .01em; text-wrap: balance; margin: 0; line-height: 1.05; }
+p { margin: 0; max-width: 62ch; }
+.mono { font-family: var(--mono); }
+img { display: block; max-width: 100%; height: auto; }
+
+/* document control strip */
+.ctrl { border-bottom: 1px solid var(--rule); font-family: var(--mono); font-size: 13px; color: var(--ink-2); }
+.ctrl .wrap { display: flex; flex-wrap: wrap; gap: 8px 28px; padding-block: 12px; }
+.ctrl b { color: var(--ink); font-weight: 400; }
+
+/* hero */
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 48px; padding-block: 56px 48px; align-items: center; }
+.eyebrow { font-family: var(--mono); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--red); }
+.hero h1 { font-size: clamp(52px, 8vw, 96px); text-transform: uppercase; margin-top: 12px; }
+.hero h1 span { color: var(--blue); }
+.hero .lead { font-size: 19px; margin-top: 20px; color: var(--ink); }
+.hero .req { margin-top: 24px; padding: 14px 16px; border-left: 3px solid var(--red); background: var(--sheet); font-size: 15px; color: var(--ink-2); max-width: 62ch; }
+.hero .req strong { color: var(--ink); }
+.hero figure { margin: 0; }
+.shot { background: var(--screen); border-radius: 6px; overflow: hidden; border: 1px solid var(--rule); }
+figcaption { font-family: var(--mono); font-size: 13px; color: var(--ink-2); margin-top: 10px; }
+figcaption b { color: var(--red); font-weight: 400; margin-right: 8px; }
+
+/* spec sheet */
+.specs { border-block: 1px solid var(--rule); background: var(--sheet); }
+.specs .wrap { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); padding-block: 0; }
+.spec { padding: 22px 16px 20px 0; border-right: 1px solid var(--rule); padding-left: 16px; }
+.spec:first-child { padding-left: 0; }
+.spec:last-child { border-right: 0; }
+.spec .v { white-space: nowrap; font-family: var(--display); font-size: clamp(28px, 3.2vw, 40px); font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
+.spec .v small { font-size: 18px; color: var(--ink-2); margin-left: 3px; }
+.spec .k { font-size: 13px; color: var(--ink-2); margin-top: 8px; line-height: 1.35; }
+
+/* plates */
+.section-head { padding-block: 72px 8px; display: flex; gap: 16px; align-items: baseline; flex-wrap: wrap; }
+.section-head h2 { font-size: clamp(34px, 5vw, 48px); text-transform: uppercase; }
+.section-head .mono { color: var(--red); font-size: 14px; }
+.plate { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; padding-block: 40px; border-top: 1px solid var(--rule); align-items: start; }
+.plate:first-of-type { border-top: 0; }
+.plate.flip .media { order: 2; }
+.plate h3 { font-size: 30px; text-transform: uppercase; margin-bottom: 14px; }
+.plate p + p { margin-top: 12px; }
+.plate ul { margin: 16px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.plate li { padding-left: 22px; position: relative; max-width: 60ch; }
+.plate li::before { content: ""; position: absolute; left: 0; top: .72em; width: 10px; height: 2px; background: var(--red); }
+.btns { font-family: var(--mono); font-size: 14px; color: var(--blue); }
+.pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+.trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding-block: 8px 40px; }
+.trio figure { margin: 0; }
+.trio p { font-size: 15px; color: var(--ink-2); margin-top: 6px; }
+.trio h3 { font-size: 22px; text-transform: uppercase; margin-top: 14px; }
+
+/* install */
+.install { background: var(--sheet); border-block: 1px solid var(--rule); margin-top: 72px; }
+.install .wrap { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 48px; padding-block: 56px; }
+.install h2 { font-size: clamp(34px, 5vw, 48px); text-transform: uppercase; }
+.steps { list-style: none; margin: 0; padding: 0; counter-reset: s; display: grid; gap: 18px; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; }
+.steps li::before { content: counter(s); font-family: var(--display); font-size: 34px; font-weight: 600; color: var(--red); line-height: 1; }
+.steps b { display: block; font-weight: 600; }
+.steps span { color: var(--ink-2); font-size: 15px; }
+
+/* revisions */
+.rev-wrap { overflow-x: auto; margin-top: 24px; }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 15px; }
+th, td { text-align: left; padding: 12px 16px 12px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--mono); font-weight: 400; font-size: 13px; color: var(--ink-2); text-transform: uppercase; letter-spacing: .08em; }
+td:first-child { font-family: var(--mono); color: var(--red); white-space: nowrap; width: 72px; }
+.credits { padding-block: 56px 72px; display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 32px; align-items: center; }
+.credits img { width: 120px; }
+.credits p { color: var(--ink-2); font-size: 15px; }
+.credits p + p { margin-top: 8px; }
+
+@media (max-width: 860px) {
+  .hero .wrap, .plate, .install .wrap { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .plate.flip .media { order: 0; }
+  .specs .wrap { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .spec:nth-child(3) { border-right: 0; }
+  .spec:nth-child(n+4) { border-top: 1px solid var(--rule); }
+  .spec:nth-child(4) { padding-left: 0; }
+  .trio { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 480px) {
+  .specs .wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .spec { border-right: 0; padding-left: 0; }
+  .spec:nth-child(n+3) { border-top: 1px solid var(--rule); }
+  .pair { grid-template-columns: minmax(0, 1fr); }
+  .credits { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* site navigation and download buttons (GitHub Pages) */
+.site-nav { background: var(--sheet); border-bottom: 1px solid var(--rule); }
+.site-nav .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center; justify-content: space-between; padding-block: 10px; }
+.site-nav .brand { font-family: var(--display); font-weight: 600; font-size: 20px; text-transform: uppercase; letter-spacing: .02em; color: var(--ink); text-decoration: none; }
+.site-nav nav { display: flex; flex-wrap: wrap; gap: 6px 20px; font-family: var(--mono); font-size: 14px; }
+.site-nav nav a { color: var(--ink-2); text-decoration: none; }
+.site-nav nav a:hover, .site-nav nav a[aria-current] { color: var(--blue); }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 18px; border-radius: 4px; font-family: var(--mono); font-size: 15px; text-decoration: none; border: 1px solid var(--blue); color: var(--blue); }
+.btn.primary { background: var(--blue); color: var(--paper); }
+.btn small { opacity: .8; font-size: 12px; }
+.btn:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+
+/* trailer */
+.trailer { padding-bottom: 8px; }
+.trailer figure { margin: 0; }
+.trailer .shot { aspect-ratio: 16 / 9; }
+.trailer video { display: block; width: 100%; height: 100%; background: var(--screen); }
+
+
+/* F-15C SIT: DTM Planner showcase and small additions */
+.dtm-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding-block: 8px 24px; }
+.dtm-grid figure { margin: 0; }
+.dtm-grid h3 { font-size: 22px; text-transform: uppercase; margin-top: 14px; }
+.dtm-grid p { font-size: 15px; color: var(--ink-2); margin-top: 6px; }
+.shot.light { background: #0e1116; }
+.key { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px 24px; margin-top: 18px; font-size: 14px; }
+.key div { display: flex; gap: 10px; align-items: center; }
+.sw { width: 14px; height: 14px; border-radius: 3px; flex: none; }
+@media (max-width: 860px) { .dtm-grid { grid-template-columns: minmax(0, 1fr); } .key { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+</style>
+<style>
+.dtm-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding-block: 8px 24px; }
+.dtm-grid figure { margin: 0; }
+.dtm-grid h3 { font-size: 22px; text-transform: uppercase; margin-top: 14px; }
+.dtm-grid p { font-size: 15px; color: var(--ink-2); margin-top: 6px; }
+.shot.light { background: #0e1116; }
+.shot.card { background: #d8d6cf; }
+@media (max-width: 860px) { .dtm-grid { grid-template-columns: minmax(0, 1fr); } }
+</style>
+</head>
+<body>
+<header class="site-nav"><div class="wrap">
+  <a class="brand" href="./">Su-27 Radio (WW)</a>
+  <nav aria-label="Site">
+    <a href="./" aria-current="page">Overview</a>
+    <a href="./#cockpit">Cockpit</a>
+    <a href="./#planner">DTC Planner</a>
+    <a href="manual.html">Pilot manual</a>
+    <a href="https://github.com/WWNyuu/SU27-SRS-radio-implementation/releases/download/1.0/Su-27_Radio_WW_v1.0.zip">Download v1.0</a>
+  </nav>
+</div></header>
+<div class="ctrl"><div class="wrap">
+  <span>BULLETIN <b>WW / SU-1</b></span>
+  <span>REV <b>1.0</b></span>
+  <span>AIRCRAFT <b>SU-27 / J-11A (FLAMING CLIFFS)</b></span>
+  <span>RADIOS <b>R-800 УКВ · R-864 КВ</b></span>
+</div></div>
+
+<header class="hero"><div class="wrap">
+  <div>
+    <div class="eyebrow">DCS World · Flaming Cliffs Su-27 / J-11A</div>
+    <h1>Su-27 <span>Radio</span></h1>
+    <p class="lead">The Flanker's radios, worked from the cockpit the 80s Soviet way: load a cartridge on the ВВОД ДАННЫХ plate, turn the КАНАЛ knobs on the УКВ / КВ panel and SRS tunes along, set each radio's volume with its ГРОМК knob, and read your channels off the handwritten card on the canopy rail.</p>
+    <p class="req"><strong>A tech mod for the stock Su-27 and J-11A.</strong> Needs DCS World with the Su-27 or J-11A from Flaming Cliffs, and <a href="https://github.com/ciribob/DCS-SimpleRadioStandalone" style="color:var(--blue)">SRS</a> for the radios. It sits in Saved Games and changes nothing in the DCS install, so DCS updates leave it alone.</p>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/WWNyuu/SU27-SRS-radio-implementation/releases/download/1.0/Su-27_Radio_WW_v1.0.zip">Download v1.0 <small>ZIP · 15 MB</small></a>
+      <a class="btn" href="manual.html">Pilot manual</a>
+      <a class="btn" href="planner/#su27">Open the DTC Planner</a>
+    </div>
+  </div>
+  <figure>
+    <div class="shot"><img src="img/outside.jpg" alt="A J-11A in flight at sunset over the sea" width="1800" height="768" loading="lazy"></div>
+    <figcaption><b>SL. 0</b>Su-27 / J-11A</figcaption>
+  </figure>
+</div></header>
+
+<section class="specs" aria-label="Key figures"><div class="wrap">
+  <div class="spec"><div class="v">6</div><div class="k">cartridges on the КАССЕТА knob, plus the mission's presets</div></div>
+  <div class="spec"><div class="v">2×20</div><div class="k">channels: R-800 УКВ and R-864 КВ, tuned in SRS</div></div>
+  <div class="spec"><div class="v">2</div><div class="k">ГРОМК volume knobs, one per radio</div></div>
+  <div class="spec"><div class="v">20</div><div class="k">rows on the handwritten channel card</div></div>
+  <div class="spec"><div class="v">3</div><div class="k">jets in one DTC Planner: MiG-29A, F-15C, Su-27</div></div>
+  <div class="spec"><div class="v">0</div><div class="k">files changed in the DCS install</div></div>
+</div></section>
+
+<main class="wrap">
+  <div class="section-head" id="cockpit"><h2>In the cockpit</h2><span class="mono">SL. 1 – SL. 4</span></div>
+
+  <article class="plate">
+    <figure class="media">
+      <div class="shot"><img src="img/cpt_plate.jpg" alt="The ВВОД ДАННЫХ plate on the right console wall: КАССЕТА knob on МИС, the В РАБОТЕ window showing П0 and the green ГОТОВ lamp lit" width="1000" height="840" loading="lazy"></div>
+      <figcaption><b>SL. 1</b>The plate: the mission's presets loaded (П0, ГОТОВ)</figcaption>
+    </figure>
+    <div>
+      <h3>ВВОД ДАННЫХ: loading a cartridge</h3>
+      <p>A data input plate on the blank cover beside your right hip. Turn the КАССЕТА knob to МИС for the mission's own presets or to one of six cartridges, press ЗАГР, and the plate reads it.</p>
+      <ul>
+        <li>The В РАБОТЕ window flashes while it reads, then shows what is in: П0 for the mission, П1 to П6 for a cartridge.</li>
+        <li>ГОТОВ (green) when it worked, ОТКАЗ (red) when there is no cartridge for that number; the one loaded before stays in.</li>
+        <li>Dark without electric power; a short lamp test when power comes on.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="plate flip">
+    <figure class="media">
+      <div class="shot"><img src="img/cpt_radio.jpg" alt="The УКВ / КВ radio panel on the left console: both КАНАЛ windows showing channel 01, the КАНАЛ knobs and the small ГРОМК knobs" width="660" height="900" loading="lazy"></div>
+      <figcaption><b>SL. 2</b>The УКВ / КВ radio panel</figcaption>
+    </figure>
+    <div>
+      <h3>КАНАЛ and ГРОМК</h3>
+      <p>The radio panel on the left console works. The big КАНАЛ knobs pick the channel, 1 to 20, and the window above each one shows it. Every step tunes SRS: УКВ is the R-800 (radio 1), КВ the R-864 (radio 2).</p>
+      <ul>
+        <li>The knobs go round and round: past 20 comes 1 again.</li>
+        <li>After a load both radios go straight to the channels the knobs are on.</li>
+        <li>The small ГРОМК knobs set each radio's volume in SRS, from silent at 7:30 to full at 4:30. They start at 80 %.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="plate">
+    <figure class="media">
+      <div class="shot"><img src="img/cpt_card.jpg" alt="The КАНАЛЫ РАДИОСВЯЗИ card on the right canopy rail, filled in by hand in blue ink: channel, frequency, station and callsign" width="980" height="960" loading="lazy"></div>
+      <figcaption><b>SL. 3</b>КАНАЛЫ РАДИОСВЯЗИ on the canopy rail</figcaption>
+    </figure>
+    <div>
+      <h3>The channel card</h3>
+      <p>ED's channel card on the right canopy rail gets written on, in blue ballpoint: every channel of the loaded cartridge with its frequency, station and callsign. It is rewritten whenever you load, so a glance tells you where the tower is.</p>
+      <ul>
+        <li>УКВ channels first, then КВ, marked К 1, К 2 …: 20 rows, like a real card.</li>
+        <li>Top right: which cartridge is in, or the mission's presets.</li>
+        <li>With МИС the stations come from the mission; your group's own frequency is "своя группа".</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="plate flip">
+    <figure class="media">
+      <div class="shot light"><img src="img/cpt_wide.jpg" alt="The Su-27's left console with the УКВ / КВ radio panel beside the throttles" width="1800" height="1020" loading="lazy"></div>
+      <figcaption><b>SL. 4</b>The left console</figcaption>
+    </figure>
+    <div>
+      <h3>Made to fit in</h3>
+      <p>The plate, the knobs and the card are placed on ED's own cockpit, measured from its model: they sit on the panels as if they had always been there, in the Su-27 and in the J-11A.</p>
+      <ul>
+        <li>Everything is clickable with the mouse, left click and right click.</li>
+        <li>No keybinds to set up, no files in the DCS install to patch.</li>
+        <li>Options &gt; Special &gt; Su-27 Radio switches it on and off.</li>
+      </ul>
+    </div>
+  </article>
+
+  <div class="trio">
+    <figure>
+      <div class="shot"><img src="img/cpt_j11.jpg" alt="The J-11A's radio panel, with Chinese labels, and the add-on's КАНАЛ and ГРОМК knobs" width="640" height="640" loading="lazy"></div>
+      <figcaption><b>SL. 5</b>J-11A radio panel</figcaption>
+      <h3>J-11A too</h3>
+      <p>The J-11A shares the cockpit: same plate, same knobs, same card, with its own labels.</p>
+    </figure>
+    <figure>
+      <div class="shot"><img src="img/outside2.jpg" alt="A J-11A from behind, flying into the sunset" width="1800" height="768" loading="lazy"></div>
+      <figcaption><b>SL. 6</b>Into the sunset</figcaption>
+      <h3>Multiplayer ready</h3>
+      <p>Mission presets come from your own slot, also on servers with dynamic slots.</p>
+    </figure>
+    <figure>
+      <div class="shot"><img src="img/dtc_cardtab.jpg" alt="The DTC Planner's КАРТОЧКА tab showing the card for a cartridge" width="1600" height="956" loading="lazy"></div>
+      <figcaption><b>SL. 7</b>Planned card</figcaption>
+      <h3>Plan it first</h3>
+      <p>The planner shows the card before you fly, exactly as the cockpit will write it.</p>
+    </figure>
+  </div>
+
+  <div class="section-head" id="planner"><h2>WW DTC Planner</h2><span class="mono">MIG-29A · F-15C · SU-27 · ONE HTML FILE</span></div>
+  <article class="plate">
+    <figure class="media">
+      <div class="shot"><img src="img/dtc_ukv.jpg" alt="WW DTC Planner with Su-27 picked: Caucasus map with the airfields on the card tagged by channel, Kutaisi picked, and the УКВ channel list" width="1600" height="956" loading="lazy"></div>
+      <figcaption><b>FIG. D1</b>УКВ channels, Caucasus</figcaption>
+    </figure>
+    <div>
+      <h3>Write the comm plan, load it in the jet</h3>
+      <p>The WW DTC Planner makes the cartridges for all three Wild Wolves mods: pick MiG-29A, F-15C or Su-27 / J-11A at the top. It runs in any browser, online or as one offline file in the download, with the DCS maps built in.</p>
+      <ul>
+        <li>20 УКВ and 20 КВ channels with station and callsign for the card.</li>
+        <li>Click an airfield for its DCS tower frequencies: VHF or UHF to УКВ, HF to КВ, with the airfield's name and callsign in Russian.</li>
+        <li>Import a Su-27 flight's presets from a mission file (.miz).</li>
+        <li>Save it as <span class="mono">2 Vitezovi CAP West.dtc</span> into <span class="mono">Saved Games\DCS\DTC\Su-27</span>: the first digit is the КАССЕТА position.</li>
+      </ul>
+      <div class="cta"><a class="btn primary" href="planner/#su27">Open the DTC Planner</a></div>
+    </div>
+  </article>
+  <div class="dtm-grid">
+    <figure><div class="shot card"><img src="img/dtc_card.jpg" alt="The КАРТОЧКА preview: the channel card written out as it will be in the cockpit" width="1474" height="524" loading="lazy"></div>
+      <figcaption><b>FIG. D2</b>КАРТОЧКА</figcaption><h3>The card, before you fly</h3><p>See the card exactly as the cockpit will write it.</p></figure>
+    <figure><div class="shot"><img src="img/dtc_cart.jpg" alt="КАССЕТА tab: cartridge name, the КАССЕТА number and the file name" width="1600" height="956" loading="lazy"></div>
+      <figcaption><b>FIG. D3</b>КАССЕТА</figcaption><h3>Cartridge and number</h3><p>Name, КАССЕТА position and the file name the jet looks for.</p></figure>
+  </div>
+</main>
+
+<section class="install"><div class="wrap">
+  <div>
+    <h2>Install</h2>
+    <p style="margin-top:16px;color:var(--ink-2)">Everything lives in your Saved Games folder. The installer copies one hook (it hands the mission's radio presets to the cockpit) and an example cartridge. UNINSTALL takes the hook out again.</p>
+  </div>
+  <ol class="steps">
+    <li><div><b>Unzip into Mods\tech</b><span><a href="https://github.com/WWNyuu/SU27-SRS-radio-implementation/releases/download/1.0/Su-27_Radio_WW_v1.0.zip" style="color:var(--blue)">Download v1.0</a> and unzip it so the folder sits at <span class="mono">Saved Games\DCS\Mods\tech\Su-27 Radio (WW)</span>.</span></div></li>
+    <li><div><b>Run INSTALL.bat</b><span>In that folder. DCS updates don't undo it: nothing in the DCS install is touched.</span></div></li>
+    <li><div><b>Fly</b><span>Have SRS running. Load a cartridge on the plate, or fly on the mission's presets. The <a href="manual.html" style="color:var(--blue)">pilot manual</a> explains every knob.</span></div></li>
+  </ol>
+</div></section>
+
+<section class="wrap">
+  <div class="section-head"><h2>Revisions</h2></div>
+  <div class="rev-wrap">
+    <table>
+      <thead><tr><th>Rev</th><th>Added</th></tr></thead>
+      <tbody>
+        <tr><td>1.0</td><td>First release: ВВОД ДАННЫХ cartridge plate (МИС and six cartridges, ГОТОВ / ОТКАЗ, power and lamp test); УКВ / КВ radio panel with КАНАЛ channel knobs and windows and ГРОМК volume knobs, tuned in SRS; handwritten КАНАЛЫ РАДИОСВЯЗИ card; mission presets through a hook; WW DTC Planner for MiG-29A, F-15C and Su-27; installer. Su-27 and J-11A.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="credits" style="grid-template-columns:minmax(0,1fr)">
+    <div>
+      <p>DCS World and the Su-27 / J-11A: Eagle Dynamics. Planner maps: Natural Earth, NOAA DEM. Handwriting: Bad Script font, SIL Open Font License. A fan-made add-on, not affiliated with Eagle Dynamics.</p>
+    </div>
+  </div>
+</section>
+</body>
+</html>
