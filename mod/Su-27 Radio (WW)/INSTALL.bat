@@ -16,7 +16,7 @@ for %%I in ("%MOD%..\..\..") do set "SG=%%~fI"
 if /i not "%P1%"=="tech" goto wrong_place
 if /i not "%P2%"=="Mods" goto wrong_place
 echo.
-echo  Su-27 Radio (WW) 1.0 - Flaming Cliffs Su-27 / J-11A
+echo  Su-27 Radio (WW) 1.1 - Flaming Cliffs Su-27 / J-11A
 echo.
 echo  Saved Games folder: %SG%
 echo.
@@ -32,10 +32,13 @@ goto done
 :example_there
 echo  - DTC\Su-27 already has the example cartridge: left as it is
 :done
+echo  - controls (Options - Controls - Su-27 / J-11A, category "Su-27 Radio (WW)"):
+powershell -NoProfile -ExecutionPolicy Bypass -File "%MOD%installer\su27radio_binds.ps1" %*
 echo.
 echo  Done. Start DCS: Options - Special - Su-27 Radio has the on/off switch.
 echo  Cartridges: DTC Planner\WW DTC Planner.html, save them into
 echo  %SG%\DTC\Su-27
+echo  After a DCS update or repair the radio controls disappear: run INSTALL.bat again.
 echo.
 pause
 exit /b 0

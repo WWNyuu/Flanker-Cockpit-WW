@@ -181,12 +181,12 @@ td:first-child { font-family: var(--mono); color: var(--red); white-space: nowra
     <a href="./#cockpit">Cockpit</a>
     <a href="./#planner">DTC Planner</a>
     <a href="manual.html">Pilot manual</a>
-    <a href="https://github.com/WWNyuu/SU27-SRS-radio-implementation/releases/download/1.0/Su-27_Radio_WW_v1.0.zip">Download v1.0</a>
+    <a href="https://github.com/WWNyuu/SU27-SRS-radio-implementation/releases/download/1.1/Su-27_Radio_WW_v1.1.zip">Download v1.1</a>
   </nav>
 </div></header>
 <div class="ctrl"><div class="wrap">
   <span>BULLETIN <b>WW / SU-1</b></span>
-  <span>REV <b>1.0</b></span>
+  <span>REV <b>1.1</b></span>
   <span>AIRCRAFT <b>SU-27 / J-11A (FLAMING CLIFFS)</b></span>
   <span>RADIOS <b>R-800 УКВ · R-864 КВ</b></span>
 </div></div>
@@ -198,7 +198,7 @@ td:first-child { font-family: var(--mono); color: var(--red); white-space: nowra
     <p class="lead">The Flanker's radios, worked from the cockpit the 80s Soviet way: load a cartridge on the ВВОД ДАННЫХ plate, turn the КАНАЛ knobs on the УКВ / КВ panel and SRS tunes along, set each radio's volume with its ГРОМК knob, and read your channels off the handwritten card on the canopy rail.</p>
     <p class="req"><strong>A tech mod for the stock Su-27 and J-11A.</strong> Needs DCS World with the Su-27 or J-11A from Flaming Cliffs, and <a href="https://github.com/ciribob/DCS-SimpleRadioStandalone" style="color:var(--blue)">SRS</a> for the radios. It sits in Saved Games and changes nothing in the DCS install, so DCS updates leave it alone.</p>
     <div class="cta">
-      <a class="btn primary" href="https://github.com/WWNyuu/SU27-SRS-radio-implementation/releases/download/1.0/Su-27_Radio_WW_v1.0.zip">Download v1.0 <small>ZIP · 15 MB</small></a>
+      <a class="btn primary" href="https://github.com/WWNyuu/SU27-SRS-radio-implementation/releases/download/1.1/Su-27_Radio_WW_v1.1.zip">Download v1.1 <small>ZIP · 15 MB</small></a>
       <a class="btn" href="manual.html">Pilot manual</a>
       <a class="btn" href="planner/#su27">Open the DTC Planner</a>
     </div>
@@ -249,6 +249,7 @@ td:first-child { font-family: var(--mono); color: var(--red); white-space: nowra
         <li>The knobs go round and round: past 20 comes 1 again.</li>
         <li>After a load both radios go straight to the channels the knobs are on.</li>
         <li>The small ГРОМК knobs set each radio's volume in SRS, from silent at 7:30 to full at 4:30. They start at 80 %.</li>
+        <li>New in 1.1: channel up / down and volume up / down for both radios can be bound in Options › Controls, category "Su-27 Radio (WW)". The knob turns with the key.</li>
       </ul>
     </div>
   </article>
@@ -335,11 +336,11 @@ td:first-child { font-family: var(--mono); color: var(--red); white-space: nowra
 <section class="install"><div class="wrap">
   <div>
     <h2>Install</h2>
-    <p style="margin-top:16px;color:var(--ink-2)">Everything lives in your Saved Games folder. The installer copies one hook (it hands the mission's radio presets to the cockpit) and an example cartridge. UNINSTALL takes the hook out again.</p>
+    <p style="margin-top:16px;color:var(--ink-2)">The add-on lives in your Saved Games folder. The installer copies one hook (it hands the mission's radio presets to the cockpit) and an example cartridge, and adds the radio controls to the Su-27's controls files. UNINSTALL takes both out again.</p>
   </div>
   <ol class="steps">
-    <li><div><b>Unzip into Mods\tech</b><span><a href="https://github.com/WWNyuu/SU27-SRS-radio-implementation/releases/download/1.0/Su-27_Radio_WW_v1.0.zip" style="color:var(--blue)">Download v1.0</a> and unzip it so the folder sits at <span class="mono">Saved Games\DCS\Mods\tech\Su-27 Radio (WW)</span>.</span></div></li>
-    <li><div><b>Run INSTALL.bat</b><span>In that folder. DCS updates don't undo it: nothing in the DCS install is touched.</span></div></li>
+    <li><div><b>Unzip into Mods\tech</b><span><a href="https://github.com/WWNyuu/SU27-SRS-radio-implementation/releases/download/1.1/Su-27_Radio_WW_v1.1.zip" style="color:var(--blue)">Download v1.1</a> and unzip it so the folder sits at <span class="mono">Saved Games\DCS\Mods\tech\Su-27 Radio (WW)</span>.</span></div></li>
+    <li><div><b>Run INSTALL.bat</b><span>In that folder. After a DCS update or repair the radio controls disappear from Options › Controls: run it again (your key assignments are kept).</span></div></li>
     <li><div><b>Fly</b><span>Have SRS running. Load a cartridge on the plate, or fly on the mission's presets. The <a href="manual.html" style="color:var(--blue)">pilot manual</a> explains every knob.</span></div></li>
   </ol>
 </div></section>
@@ -350,6 +351,7 @@ td:first-child { font-family: var(--mono); color: var(--red); white-space: nowra
     <table>
       <thead><tr><th>Rev</th><th>Added</th></tr></thead>
       <tbody>
+        <tr><td>1.1</td><td>Bindable controls (Options › Controls › Su-27 / J-11A, category "Su-27 Radio (WW)"): УКВ and КВ channel up / down and volume up / down; the knobs turn with the keys. The installer adds them to the jet's controls files. ГРОМК knobs: start position is now checked properly.</td></tr>
         <tr><td>1.0</td><td>First release: ВВОД ДАННЫХ cartridge plate (МИС and six cartridges, ГОТОВ / ОТКАЗ, power and lamp test); УКВ / КВ radio panel with КАНАЛ channel knobs and windows and ГРОМК volume knobs, tuned in SRS; handwritten КАНАЛЫ РАДИОСВЯЗИ card; mission presets through a hook; WW DTC Planner for MiG-29A, F-15C and Su-27; installer. Su-27 and J-11A.</td></tr>
       </tbody>
     </table>

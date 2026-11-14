@@ -287,8 +287,12 @@ end
 ---------------------------------------------------------------------------
 -- DCS callbacks
 ---------------------------------------------------------------------------
+-- v1.1: the main panel's argument first (get_cockpit_draw_argument_value
+-- gave 0 for the add-on's knobs in 1.0, so knob_init never saw its own work)
 local function arg_now(a)
-	local ok, v = pcall(function() return get_cockpit_draw_argument_value and get_cockpit_draw_argument_value(a) end)
+	local ok, v = pcall(function() return GetDevice(0):get_argument_value(a) end)
+	if ok and tonumber(v) then return tonumber(v) end
+	ok, v = pcall(function() return get_cockpit_draw_argument_value and get_cockpit_draw_argument_value(a) end)
 	return ok and tonumber(v) or nil
 end
 local function chan_of(v) return (floor((v or 0) * 20 + 0.5) % 20) + 1 end
@@ -326,6 +330,41 @@ local function knob_init()
 	end
 end
 
+-- v1.1: the bound keys turn the knobs too: the knob moves (so a later click
+-- steps on from there) and SRS is tuned / set as by a click
+local CH_KNOB = {
+	ukv = {arg = LDR.ARG_UKV, cmd = RAD_CMD.UKV_CH, click = "RAD_UKV_CLICK"},
+	kv  = {arg = LDR.ARG_KV,  cmd = RAD_CMD.KV_CH,  click = "RAD_KV_CLICK"},
+}
+local KEYS = {
+	[RAD_KEY.UKV_CH_UP] = {"ch", "ukv", 1},   [RAD_KEY.UKV_CH_DN] = {"ch", "ukv", -1},
+	[RAD_KEY.KV_CH_UP]  = {"ch", "kv", 1},    [RAD_KEY.KV_CH_DN]  = {"ch", "kv", -1},
+	[RAD_KEY.UKV_VOL_UP] = {"vol", "ukv", 1}, [RAD_KEY.UKV_VOL_DN] = {"vol", "ukv", -1},
+	[RAD_KEY.KV_VOL_UP]  = {"vol", "kv", 1},  [RAD_KEY.KV_VOL_DN]  = {"vol", "kv", -1},
+}
+local key_busy = false
+local function knob_put(k, v)
+	key_busy = true       -- a clickable action comes back through SetCommand
+	for _, w in ipairs(VOL_WAYS) do pcall(w[2], k, v) end
+	key_busy = false
+end
+local function key_step(what, band, d)
+	if what == "ch" then
+		local ch = ((ST.ch[band] - 1 + d) % 20) + 1
+		ST.ch[band] = ch
+		knob_put(CH_KNOB[band], (ch - 1) * 0.05)
+		if PWR.on and not PWR.test_t then tune(band) end
+	else
+		local v = math.max(0, math.min(1, floor(ST.vol[band] * 20 + 0.5 + d) / 20))
+		if v ~= ST.vol[band] then
+			ST.vol[band] = v
+			VOL_KNOB[band].done = true
+			knob_put(VOL_KNOB[band], v)
+			srs_vol(BAND_RADIO[band], v)
+		end
+	end
+end
+
 function post_initialize()
 	dev:listen_command(LDR_CMD.SEL)
 	dev:listen_command(LDR_CMD.LOAD)
@@ -334,6 +373,7 @@ function post_initialize()
 	dev:listen_command(RAD_CMD.UKV_VOL)
 	dev:listen_command(RAD_CMD.KV_VOL)
 	dev:listen_command(LDR.POWER_CMD)
+	for cmd in pairs(KEYS) do dev:listen_command(cmd) end
 	open_udp()
 	H.align:set(LDR.ALIGN_TEST and 1 or 0)
 	show(H.ldr, nil); show(H.ukv, nil); show(H.kv, nil); H.go:set(0); H.nogo:set(0)
@@ -359,10 +399,16 @@ function post_initialize()
 		if type(p) == "table" and p.su27_radio_logs == true then LOG_MAX = 1000 end
 	end)
 	card_update()
-	log("Su-27 Radio (WW) 1.0 up (" .. tostring(get_aircraft_type and get_aircraft_type()) .. "), UDP " .. udp_state)
+	log("Su-27 Radio (WW) 1.1 up (" .. tostring(get_aircraft_type and get_aircraft_type()) .. "), UDP " .. udp_state)
 end
 
 function SetCommand(command, value)
+	local key = KEYS[command]
+	if key then
+		if (value or 1) > 0 then key_step(key[1], key[2], key[3]) end
+		return
+	end
+	if key_busy then return end
 	if command == LDR.POWER_CMD then
 		if PWR.sw ~= nil then PWR.sw = not PWR.sw end
 		log("electric power switch: " .. tostring(PWR.sw))

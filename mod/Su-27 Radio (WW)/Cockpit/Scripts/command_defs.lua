@@ -9,3 +9,12 @@ RAD_CMD = {
 	UKV_VOL = 3213,  -- v0.4: УКВ ГРОМК knob (value = argument = volume 0 .. 1)
 	KV_VOL  = 3214,  -- v0.4: КВ ГРОМК knob
 }
+-- v1.1: Options > Controls (Su-27 / J-11A, category "Su-27 Radio (WW)").
+-- FC3 does not pass 3xxx through from the controls, so the binds are 62xx
+-- (installer\su27radio_binds.lua puts them into the jet's controls files).
+RAD_KEY = {
+	UKV_CH_UP = 6201, UKV_CH_DN = 6202,
+	KV_CH_UP  = 6203, KV_CH_DN  = 6204,
+	UKV_VOL_UP = 6205, UKV_VOL_DN = 6206,
+	KV_VOL_UP  = 6207, KV_VOL_DN  = 6208,
+}

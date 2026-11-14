@@ -1,4 +1,4 @@
-Su-27 Radio (WW) 1.0 - radio cartridges, radio panel and channel card for the Flaming Cliffs Su-27 / J-11A
+Su-27 Radio (WW) 1.1 - radio cartridges, radio panel and channel card for the Flaming Cliffs Su-27 / J-11A
 =========================================================================================================
 
 Makes the Su-27's radios work from the cockpit, 80s Soviet style:
@@ -21,12 +21,25 @@ Install
      (it hands the mission's radio presets to the cockpit: МИС)
    - the example cartridge to Saved Games\DCS\DTC\Su-27 (only if it is not
      there yet)
+   and adds the radio controls (see "Controls" below) to the Su-27's
+   controls files in the DCS install folder (Mods\aircraft\Su-27\Input\
+   su-27\joystick and \keyboard\default.lua: one marked block, ED's lines
+   stay as they are; ED's file is kept in backup\). The J-11A uses the
+   Su-27's files, so it gets them too.
 3. Options > Special > Su-27 Radio: the add-on on/off, and a debug log.
-Nothing in the DCS install folder is changed, so a DCS update does not undo it.
+A DCS update or repair puts ED's controls files back and the radio controls
+disappear from Options > Controls: run INSTALL.bat again. Your key
+assignments are kept by DCS and come back with them.
+INSTALL.bat finds the DCS install folder by itself (registry, the usual
+places). If it does not: from a command prompt in this folder,
+    INSTALL.bat -DcsPath "D:\DCS World"
+If Windows does not allow the change (DCS in Program Files): right-click
+INSTALL.bat > Run as administrator.
 
 Uninstall
 ---------
-UNINSTALL.bat takes the hook out again. Then delete this folder. Your
+UNINSTALL.bat takes the hook and the radio controls out again. Then delete
+this folder. Your
 cartridges in Saved Games\DCS\DTC\Su-27 are left alone.
 
 The plate (right console wall)
@@ -55,6 +68,18 @@ The radio panel (left console)
   to 4:30 (full). Both start at 80 %. The knob wins over SRS's own volume
   slider for these two radios (it is sent again every 5 s).
 - SRS: UDP command port 9040 (SRS client setting, the default).
+
+Controls (v1.1)
+---------------
+Options > Controls > Su-27 (or J-11A), category "Su-27 Radio (WW)":
+    UKV radio (R-800, SRS 1) - Channel Up / Channel Down
+    KV radio (R-864, SRS 2)  - Channel Up / Channel Down
+    UKV radio (R-800, SRS 1) - Volume Up / Volume Down
+    KV radio (R-864, SRS 2)  - Volume Up / Volume Down
+Nothing is bound to start with: bind them to keys or HOTAS buttons. One
+press = one step; the knob in the cockpit turns with it and SRS follows,
+just as with a click. (The plate on the right has no controls: it is
+used on the ground.)
 
 The channel card (right canopy rail)
 ------------------------------------

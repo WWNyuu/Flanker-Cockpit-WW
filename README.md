@@ -11,11 +11,11 @@ Working radios for the Flaming Cliffs Su-27 and J-11A in DCS World, 80s Soviet s
 
 ## Install
 
-1. Download `Su-27_Radio_WW_v1.0.zip` from the 1.0 release (also in `downloads/`) and unzip it so the folder sits at `Saved Games\DCS\Mods\tech\Su-27 Radio (WW)`.
-2. Double-click `INSTALL.bat` in that folder. It copies the hook for the mission's radio presets and an example cartridge. Nothing in the DCS install is changed.
+1. Download `Su-27_Radio_WW_v1.1.zip` from the 1.1 release (also in `downloads/`) and unzip it so the folder sits at `Saved Games\DCS\Mods\tech\Su-27 Radio (WW)`.
+2. Double-click `INSTALL.bat` in that folder. It copies the hook for the mission's radio presets and an example cartridge, and adds the radio controls (Options > Controls > Su-27 / J-11A, category "Su-27 Radio (WW)": channel and volume up / down for both radios) to the Su-27's controls files in the DCS install. Run it again after a DCS update or repair.
 3. Options > Special > Su-27 Radio: on / off and a debug log.
 
-`UNINSTALL.bat` takes the hook out again.
+`UNINSTALL.bat` takes the hook and the controls out again.
 
 ## Repository
 
