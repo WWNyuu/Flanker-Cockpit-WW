@@ -12,6 +12,8 @@ local ANCHOR_OWN = {"LDR_C", "LDR_B", "LDR_R"}
 local ANCHOR_RAD = {"RAD_C", "RAD_B", "RAD_R"}
 -- v0.3: the radio channel card (anchors in front of ED's card)
 local ANCHOR_CRD = {"CRD_C", "CRD_B", "CRD_R"}
+-- MFD (WIP): the MFD page, on the MFD's screen (anchors MFD_C / B / R)
+local ANCHOR_MFD = {"MFD_C", "MFD_B", "MFD_R"}
 
 -- only with the plate's model exported (Tools\su27_ldr_plate.py in Blender):
 -- without Shapes\SU27_LDR.edm the add-on stays out and the jet is stock
@@ -20,6 +22,15 @@ local function have_model()
 	local ok, f = pcall(io.open, LockOn_Options.script_path .. "../../Shapes/SU27_LDR.edm", "rb")
 	if ok and f then f:close(); return true end
 	return not ok
+end
+
+-- MFD (WIP): only with a model that has it (Tools\su27_ldr_plate.py v10
+-- writes Shapes\SU27_LDR_MFD.txt next to the model when it exports)
+local function have_mfd()
+	if not (io and io.open) then return false end
+	local ok, f = pcall(io.open, LockOn_Options.script_path .. "../../Shapes/SU27_LDR_MFD.txt", "r")
+	if ok and f then f:close(); return true end
+	return false
 end
 
 local t = get_aircraft_type()
@@ -36,4 +47,9 @@ if (t == "Su-27" or t == "J-11A") and have_model() then
 		nil, { ANCHOR_RAD, {} }}
 	indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path .. "LDR/indicator/init_CRD.lua",
 		nil, { ANCHOR_CRD, {} }}
+	if have_mfd() then
+		creators[devices.MFD] = {"avLuaDevice", LockOn_Options.script_path .. "MFD/mfd_device.lua"}
+		indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path .. "MFD/indicator/init_MFD.lua",
+			nil, { ANCHOR_MFD, {} }}
+	end
 end

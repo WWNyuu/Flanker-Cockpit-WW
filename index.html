@@ -181,12 +181,12 @@ td:first-child { font-family: var(--mono); color: var(--red); white-space: nowra
     <a href="./#cockpit">Cockpit</a>
     <a href="./#planner">DTC Planner</a>
     <a href="manual.html">Pilot manual</a>
-    <a href="https://github.com/WWNyuu/SU27-SRS-radio-implementation/releases/download/1.1/Su-27_Radio_WW_v1.1.zip">Download v1.1</a>
+    <a href="https://github.com/WWNyuu/SU27-SRS-radio-implementation/releases/download/1.2/Su-27_Radio_WW_v1.2.zip">Download v1.2</a>
   </nav>
 </div></header>
 <div class="ctrl"><div class="wrap">
   <span>BULLETIN <b>WW / SU-1</b></span>
-  <span>REV <b>1.1</b></span>
+  <span>REV <b>1.2</b></span>
   <span>AIRCRAFT <b>SU-27 / J-11A (FLAMING CLIFFS)</b></span>
   <span>RADIOS <b>R-800 УКВ · R-864 КВ</b></span>
 </div></div>
@@ -195,10 +195,10 @@ td:first-child { font-family: var(--mono); color: var(--red); white-space: nowra
   <div>
     <div class="eyebrow">DCS World · Flaming Cliffs Su-27 / J-11A</div>
     <h1>Su-27 <span>Radio</span></h1>
-    <p class="lead">The Flanker's radios, worked from the cockpit the 80s Soviet way: load a cartridge on the ВВОД ДАННЫХ plate, turn the КАНАЛ knobs on the УКВ / КВ panel and SRS tunes along, set each radio's volume with its ГРОМК knob, and read your channels off the handwritten card on the canopy rail.</p>
+    <p class="lead">The Flanker's radios, worked from the cockpit the 80s Soviet way: load a cartridge on the ВВОД ДАННЫХ plate, turn the КАНАЛ knobs on the УКВ / КВ panel and SRS tunes along, set each radio's volume with its ГРОМК knob, and read your channels off the handwritten card on the canopy rail. New in 1.2: a retrofit colour MFD with SA, NAV, COM, STORES and RWR pages.</p>
     <p class="req"><strong>A tech mod for the stock Su-27 and J-11A.</strong> Needs DCS World with the Su-27 or J-11A from Flaming Cliffs, and <a href="https://github.com/ciribob/DCS-SimpleRadioStandalone" style="color:var(--blue)">SRS</a> for the radios. It sits in Saved Games and changes nothing in the DCS install, so DCS updates leave it alone.</p>
     <div class="cta">
-      <a class="btn primary" href="https://github.com/WWNyuu/SU27-SRS-radio-implementation/releases/download/1.1/Su-27_Radio_WW_v1.1.zip">Download v1.1 <small>ZIP · 15 MB</small></a>
+      <a class="btn primary" href="https://github.com/WWNyuu/SU27-SRS-radio-implementation/releases/download/1.2/Su-27_Radio_WW_v1.2.zip">Download v1.2 <small>ZIP · 16 MB</small></a>
       <a class="btn" href="manual.html">Pilot manual</a>
       <a class="btn" href="planner/#su27">Open the DTC Planner</a>
     </div>
@@ -307,6 +307,25 @@ td:first-child { font-family: var(--mono); color: var(--red); white-space: nowra
     </figure>
   </div>
 
+  <div class="section-head" id="mfd"><h2>The MFD</h2><span class="mono">NEW IN 1.2</span></div>
+  <article class="plate flip">
+    <figure class="media">
+      <div class="shot"><img src="img/mfd_pages.jpg" alt="The MFD's SA page with contacts, route and threat rings, and the STORES page with the Su-27 from behind and the missiles on its ten stations" width="1520" height="720" loading="lazy"></div>
+      <figcaption><b>SL. 5</b>The MFD: SA and STORES</figcaption>
+    </figure>
+    <div>
+      <h3>New in 1.2: the MFD</h3>
+      <p>A colour MFD retrofitted over the HDD, modern against the worn 80s panel, with 20 soft keys and ED's ЦЕЛИ keypad for typing.</p>
+      <ul>
+        <li>SA: radar and datalink contacts, your flight, threat rings, route and bullseye.</li>
+        <li>PICTURE, NAV with your own waypoints, HSI, FUEL with bingo, RWR.</li>
+        <li>COM: both radios from the MFD, and a typed frequency stays on its channel.</li>
+        <li>STORES: the jet from behind with what is on each of the ten stations.</li>
+        <li>DTC: route, bullseye, bingo and lines from the same cartridges as the radios.</li>
+      </ul>
+    </div>
+  </article>
+
   <div class="section-head" id="planner"><h2>WW DTC Planner</h2><span class="mono">MIG-29A · F-15C · SU-27 · ONE HTML FILE</span></div>
   <article class="plate">
     <figure class="media">
@@ -319,7 +338,7 @@ td:first-child { font-family: var(--mono); color: var(--red); white-space: nowra
       <ul>
         <li>20 UKV and 20 KV channels with station and callsign for the card.</li>
         <li>Click an airfield for its DCS tower frequencies: VHF or UHF to UKV, HF to KV, with the airfield's name and callsign (in Russian if you like).</li>
-        <li>Steerpoints with altitude and time on target, bullseye, bingo and lines (ROUTE and LINES tabs), for the MFD coming in the next version.</li>
+        <li>Steerpoints with altitude and time on target, bullseye, bingo and lines (ROUTE and LINES tabs), for the MFD.</li>
         <li>Import a Su-27 flight's presets, route and drawings from a mission file (.miz).</li>
         <li>Save it as <span class="mono">2 Vitezovi CAP West.dtc</span> into <span class="mono">Saved Games\DCS\DTC\Su-27</span>: the first digit is the position of the cartridge knob (КАССЕТА).</li>
       </ul>
@@ -337,10 +356,10 @@ td:first-child { font-family: var(--mono); color: var(--red); white-space: nowra
 <section class="install"><div class="wrap">
   <div>
     <h2>Install</h2>
-    <p style="margin-top:16px;color:var(--ink-2)">The add-on lives in your Saved Games folder. The installer copies one hook (it hands the mission's radio presets to the cockpit) and an example cartridge, and adds the radio controls to the Su-27's controls files. UNINSTALL takes both out again.</p>
+    <p style="margin-top:16px;color:var(--ink-2)">The add-on lives in your Saved Games folder. The installer copies the hooks (the mission's radio presets, the MFD's map data) and an example cartridge, adds the MFD's export to Saved Games\DCS\Scripts\Export.lua, and adds the radio and MFD controls to the Su-27's controls files. UNINSTALL takes it all out again.</p>
   </div>
   <ol class="steps">
-    <li><div><b>Unzip into Mods\tech</b><span><a href="https://github.com/WWNyuu/SU27-SRS-radio-implementation/releases/download/1.1/Su-27_Radio_WW_v1.1.zip" style="color:var(--blue)">Download v1.1</a> and unzip it so the folder sits at <span class="mono">Saved Games\DCS\Mods\tech\Su-27 Radio (WW)</span>.</span></div></li>
+    <li><div><b>Unzip into Mods\tech</b><span><a href="https://github.com/WWNyuu/SU27-SRS-radio-implementation/releases/download/1.2/Su-27_Radio_WW_v1.2.zip" style="color:var(--blue)">Download v1.2</a> and unzip it so the folder sits at <span class="mono">Saved Games\DCS\Mods\tech\Su-27 Radio (WW)</span>.</span></div></li>
     <li><div><b>Run INSTALL.bat</b><span>In that folder. After a DCS update or repair the radio controls disappear from Options › Controls: run it again (your key assignments are kept).</span></div></li>
     <li><div><b>Fly</b><span>Have SRS running. Load a cartridge on the plate, or fly on the mission's presets. The <a href="manual.html" style="color:var(--blue)">pilot manual</a> explains every knob.</span></div></li>
   </ol>
@@ -352,6 +371,7 @@ td:first-child { font-family: var(--mono); color: var(--red); white-space: nowra
     <table>
       <thead><tr><th>Rev</th><th>Added</th></tr></thead>
       <tbody>
+        <tr><td>1.2</td><td>The MFD: a retrofit colour MFD over the HDD with SA, PICTURE, NAV (own waypoints), HSI, COM (radios, typed frequency per channel), FUEL, STORES, RWR, FLIGHT, DTC, BIT, TIME and OWN pages; 20 soft keys and the ЦЕЛИ keypad; 4477th TAES badge; its own controls and options; the installer adds the MFD export. DTC Planner: ROUTE and LINES tabs, English interface. A cartridge with only a route loads on the plate.</td></tr>
         <tr><td>1.1</td><td>Bindable controls (Options › Controls › Su-27 / J-11A, category "Su-27 Radio (WW)"): УКВ and КВ channel up / down and volume up / down; the knobs turn with the keys. The installer adds them to the jet's controls files. ГРОМК knobs: start position is now checked properly.</td></tr>
         <tr><td>1.0</td><td>First release: ВВОД ДАННЫХ cartridge plate (МИС and six cartridges, ГОТОВ / ОТКАЗ, power and lamp test); УКВ / КВ radio panel with КАНАЛ channel knobs and windows and ГРОМК volume knobs, tuned in SRS; handwritten КАНАЛЫ РАДИОСВЯЗИ card; mission presets through a hook; WW DTC Planner for MiG-29A, F-15C and Su-27; installer. Su-27 and J-11A.</td></tr>
       </tbody>

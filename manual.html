@@ -172,25 +172,25 @@ td:first-child { font-family: var(--mono); color: var(--red); white-space: nowra
     <a href="./#cockpit">Cockpit</a>
     <a href="./#planner">DTC Planner</a>
     <a href="manual.html" aria-current="page">Pilot manual</a>
-    <a href="https://github.com/WWNyuu/SU27-SRS-radio-implementation/releases/download/1.1/Su-27_Radio_WW_v1.1.zip">Download v1.1</a>
+    <a href="https://github.com/WWNyuu/SU27-SRS-radio-implementation/releases/download/1.2/Su-27_Radio_WW_v1.2.zip">Download v1.2</a>
   </nav>
 </div></header>
 <div class="wrap man">
-  <aside class="toc" aria-label="Contents"><b>Contents</b><ol><li><a href="#before-you-fly">Before you fly</a></li><li><a href="#power">Power</a></li><li><a href="#the-plate">The ВВОД ДАННЫХ plate</a></li><li><a href="#radio-panel">The УКВ / КВ radio panel</a></li><li><a href="#channel-card">The channel card</a></li><li><a href="#cartridges">Cartridges</a></li><li><a href="#planner">Using the DTC Planner</a></li><li><a href="#troubleshooting">Options and troubleshooting</a></li></ol></aside>
+  <aside class="toc" aria-label="Contents"><b>Contents</b><ol><li><a href="#before-you-fly">Before you fly</a></li><li><a href="#power">Power</a></li><li><a href="#the-plate">The ВВОД ДАННЫХ plate</a></li><li><a href="#radio-panel">The УКВ / КВ radio panel</a></li><li><a href="#channel-card">The channel card</a></li><li><a href="#cartridges">Cartridges</a></li><li><a href="#mfd">The MFD</a></li><li><a href="#planner">Using the DTC Planner</a></li><li><a href="#troubleshooting">Options and troubleshooting</a></li></ol></aside>
   <article class="doc">
     <h1>Su-27 Radio Pilot Manual</h1>
-    <p class="lead2">How to fly with the Su-27 Radio (WW) add-on v1.1 in the Flaming Cliffs Su-27 and J-11A.</p>
+    <p class="lead2">How to fly with the Su-27 Radio (WW) add-on v1.2 in the Flaming Cliffs Su-27 and J-11A.</p>
 <h2 id="before-you-fly">Before you fly</h2>
 
 <p>You need DCS World with the Su-27 or J-11A from Flaming Cliffs, and <a href="https://github.com/ciribob/DCS-SimpleRadioStandalone">SRS</a> for the radios. Without SRS everything works in the cockpit, but nothing gets tuned.</p>
 <p><strong>Install</strong></p>
 <ol>
 <li>Unzip the download so the folder sits at <code>Saved Games\DCS\Mods\tech\Su-27 Radio (WW)</code>.</li>
-<li>Double-click <code>INSTALL.bat</code> in that folder. It copies <code>su27radio_hook.lua</code> into <code>Saved Games\DCS\Scripts\Hooks</code> and the example cartridge into <code>Saved Games\DCS\DTC\Su-27</code>, and adds the radio controls to the Su-27's controls files in the DCS install folder (the J-11A uses the same files).</li>
+<li>Double-click <code>INSTALL.bat</code> in that folder. It copies <code>su27radio_hook.lua</code> into <code>Saved Games\DCS\Scripts\Hooks</code> and the example cartridge into <code>Saved Games\DCS\DTC\Su-27</code>, puts in the MFD's export (<code>S27MFD_Export.lua</code>, its hook, and one line in <code>Scripts\Export.lua</code>), and adds the radio and MFD controls to the Su-27's controls files in the DCS install folder (the J-11A uses the same files).</li>
 <li>Start DCS. <b>Options &gt; Special &gt; Su-27 Radio</b> has the on / off switch and a debug log.</li>
 </ol>
 <p>A DCS update or repair puts ED's controls files back, and the radio controls disappear from Options &gt; Controls: run <code>INSTALL.bat</code> again. Your key assignments are kept by DCS and come back with them. If the installer can't find your DCS folder, run <code>INSTALL.bat -DcsPath "D:\DCS World"</code> from a command prompt; if Windows refuses the change (DCS in Program Files), right-click <code>INSTALL.bat</code> &gt; Run as administrator.</p>
-<p><strong>Remove:</strong> <code>UNINSTALL.bat</code> takes the hook and the controls out. Then delete the folder. Your cartridges stay.</p>
+<p><strong>Remove:</strong> <code>UNINSTALL.bat</code> takes the hooks, the MFD export and the controls out. Then delete the folder. Your cartridges stay.</p>
 <h2 id="power">Power</h2>
 
 <p>The plate and the radio windows are dark until the jet has electric power: the electric power switch, or an engine running. When power comes on they run a short lamp test (88 in every window, both lamps lit), then both radios are tuned to the channels on their КАНАЛ knobs and the volumes are set.</p>
@@ -236,6 +236,23 @@ td:first-child { font-family: var(--mono); color: var(--red); white-space: nowra
 }</code></pre>
 <p><code>ukv</code> channels 1–20 at 100–399.975 MHz, <code>kv</code> channels 1–20 at 3–10 MHz. Station and callsign are only for the card; Cyrillic works.</p>
 <p><strong>МИС</strong>, the mission's presets: the radio presets set for your aircraft in the mission editor (radio 1 = УКВ, radio 2 = КВ). A slot without presets gets its group's frequency on УКВ channel 1. This needs the hook that INSTALL.bat copies.</p>
+<h2 id="mfd">The MFD (new in 1.2)</h2>
+
+<p>A colour MFD retrofitted over the HDD, right of the front panel. Twenty soft keys round the screen (L1–L5 left, R1–R5 right, B1–B5 bottom, T1–T5 top), <b>ВКЛ</b> power (press: on, hold 2 s: off), <b>ЯРК</b> + / − brightness and <b>ДЕНЬ / НОЧЬ</b>. It runs on the jet's power and boots in a few seconds into MENU. The bottom row is the same on most pages: <b>SA, RDR, MENU, NAV, RWR</b>.</p>
+<ul>
+<li><b>SA</b>: the picture: your radar and datalink contacts, your flight, threat rings, route and bullseye. RNG + / −, centred or decentred, north or heading up, steerpoint + / −, declutter; L5 opens SA SETTINGS.</li>
+<li><b>PICTURE</b>: the threat groups with bearing, range and altitude, from the bullseye or from you.</li>
+<li><b>NAV</b>: steering to the steerpoint, cross-track, ETA and the route list with times on target. <b>ADD</b> (R2) puts in a waypoint of your own: latitude as DDMMm, ВВОД, longitude as DDDMMm, ВВОД (press ADD again for bearing / range from the jet). <b>DEL</b> (R3) takes out the selected steerpoint, <b>RTE RST</b> (R4) brings back the route as loaded.</li>
+<li><b>HSI</b>: compass rose, course and deviation, bearing pointer and heading bug.</li>
+<li><b>COM</b>: both radios: channel and volume (the knobs on the panel turn with them) and the channel lists. <b>UKV MAN / KV MAN</b>: type a frequency on the keypad, ВВОД, and the channel in use gets that frequency (radios, card and page) until the next ЗАГР.</li>
+<li><b>FUEL</b>: fuel, the bingo line (BNG + / −), time and range to bingo.</li>
+<li><b>STORES</b>: the jet from behind with what hangs on each of the ten stations; the selected one amber, with gun rounds, chaff and flares.</li>
+<li><b>RWR</b>: the SPO-15's emitters round a ring, with locks and launches.</li>
+<li><b>FLIGHT</b>, <b>DTC</b> (CART + / −, READ: route, bullseye, bingo and lines from a cartridge; MSN = the mission's), <b>BIT</b>, <b>TIME</b>, <b>OWN DATA</b>.</li>
+</ul>
+<p><strong>The ЦЕЛИ keypad</strong> on the right console types into the MFD: digits and ВВОД for a steerpoint, bingo, cartridge, fighter channel, or a waypoint and frequency on NAV and COM; СБРОС clears; ИСТРЕБИТЕЛИ 1–4 jump to SA, RDR, NAV and RWR, ГР to MENU.</p>
+<p><strong>Controls</strong>: Options &gt; Controls, category <b>Su-27 MFD (WW)</b>: every soft key, power, brightness, day / night, and "fold away / back", which puts the MFD away to show the original HDD.</p>
+<p><strong>Options &gt; Special &gt; Su-27 Radio</strong>: datalink picture on SA, the RWR page, and an alignment test that draws a frame and a box per key, to check the screen and the keys.</p>
 <h2 id="planner">Using the DTC Planner</h2>
 
 <p><a href="planner/#su27">Open it online</a>, or open <code>DTC Planner\WW DTC Planner.html</code> from the download in any browser (it works offline). Pick <b>Su-27 / J-11A</b> at the top; the same planner makes MiG-29A(WW) and F-15C SIT (WW) cartridges.</p>
@@ -244,7 +261,7 @@ td:first-child { font-family: var(--mono); color: var(--red); white-space: nowra
 <li><b>UKV R-800</b> and <b>KV R-864</b>: 20 channels each, with frequency, station (up to 15 letters) and callsign (up to 13). With "Russian names on the card" ticked, Latin typed into a station or callsign turns into Cyrillic (Lastochka → Ласточка); words in capitals stay as typed.</li>
 <li><b>Airfields</b>: click one on the map, or pick it from the list, for its DCS tower frequencies. One click puts VHF or UHF into the first free UKV channel and HF into KV, with the airfield's name and callsign. Airfields on the card get their channel numbers on the map.</li>
 <li><b>Import .miz</b>: pick a Su-27 / J-11A flight from a mission file; the lead's presets become the channels, labelled where they match an airfield, and its route the steerpoints.</li>
-<li><b>ROUTE</b> and <b>LINES</b>: steerpoints (altitude in metres, time on target), bullseye, bingo and drawings, for the MFD coming in the next version. The radios ignore them.</li>
+<li><b>ROUTE</b> and <b>LINES</b>: steerpoints (altitude in metres, time on target), bullseye, bingo and drawings, for the MFD. The radios ignore them.</li>
 <li><b>CARD</b>: the card as the cockpit will write it; Enlarge shows it full size.</li>
 <li><b>Save cartridge</b> downloads <code>&lt;number&gt; &lt;name&gt;.dtc</code>: move it into <code>Saved Games\DCS\DTC\Su-27</code>.</li>
 </ul>
@@ -256,7 +273,8 @@ td:first-child { font-family: var(--mono); color: var(--red); white-space: nowra
 <li><b>МИС has no channels</b>: run INSTALL.bat (the hook), and check the mission has radio presets for your aircraft. <code>Logs\su27radio_hook.log</code> says what it found.</li>
 <li><b>ОТКАЗ</b>: no file starting with that number in <code>DTC\Su-27</code>, or the file is broken. Open it in the planner to check.</li>
 <li><b>No "Su-27 Radio (WW)" category in Controls</b>: run INSTALL.bat again (after every DCS update or repair) and read what it says about the controls.</li>
-<li><b>Logs</b>: <code>Saved Games\DCS\Logs\su27radio.log</code>; turn on the debug log in Options for more detail.</li>
+<li><b>MFD empty on SA, RWR or PICTURE</b>: run INSTALL.bat (the export and its Export.lua line), then restart DCS.</li>
+<li><b>Logs</b>: <code>Saved Games\DCS\Logs\su27radio.log</code>, and for the MFD <code>s27mfd_device.log</code> and <code>s27mfd_export.log</code>; turn on the debug log in Options for more detail.</li>
 </ul>
 
   </article>

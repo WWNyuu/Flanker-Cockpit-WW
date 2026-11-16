@@ -9,10 +9,15 @@
 #   A DCS update or repair puts ED's controls files back and the add-on's
 #   controls disappear: run INSTALL.bat again. Your own key assignments
 #   (Saved Games\DCS\Config\Input) are not touched and come back with them.
-# UNINSTALL (-Uninstall): takes the block out again (ED's file is then as it was).
+# MFD (v0.2): Saved Games\DCS\Scripts\Export.lua gets one line that loads
+#   Scripts\S27MFD_Export.lua (the MFD's radar / datalink / RWR feed; INSTALL.bat
+#   copies it and Hooks\S27MFD_hook.lua). -SavedGames <folder> (INSTALL.bat
+#   passes it).
+# UNINSTALL (-Uninstall): takes the block out again (ED's file is then as it was)
+#   and the Export.lua line.
 # -DcsPath <folder>: the DCS install folder (default: found in the registry /
 #   the usual places / the folder remembered in dcs_path.txt).
-param([switch]$Uninstall, [string]$DcsPath = "")
+param([switch]$Uninstall, [string]$DcsPath = "", [string]$SavedGames = "")
 
 if ($ExecutionContext.SessionState.LanguageMode -ne "FullLanguage") {
 	Write-Host ""
@@ -30,6 +35,8 @@ $SEP = [System.IO.Path]::DirectorySeparatorChar
 $BindBegin = "-- Su-27 Radio (WW) BINDS BEGIN"
 $BindEnd = "-- Su-27 Radio (WW) BINDS END"
 $BindRel = "Mods\aircraft\Su-27\Input\su-27"
+$ExpComment = "-- Su-27 MFD (WW) add-on (MFD data: radar, datalink, RWR)"
+$ExpLine = "pcall(function() local l=require('lfs'); dofile(l.writedir()..'Scripts/S27MFD_Export.lua') end)"
 
 function J($a, $b) { return [System.IO.Path]::Combine($a, ($b -replace '\\', $SEP)) }
 function Say($m) { Write-Host ("  " + $m) }
@@ -45,6 +52,86 @@ function Clear-ReadOnly($p) {
 }
 function WriteL1($p, $s) { Ensure-Dir ([System.IO.Path]::GetDirectoryName($p)); Clear-ReadOnly $p; [System.IO.File]::WriteAllBytes($p, $L1.GetBytes($s)) }
 function CopyFile($a, $b) { Ensure-Dir ([System.IO.Path]::GetDirectoryName($b)); Clear-ReadOnly $b; [System.IO.File]::Copy($a, $b, $true) }
+
+# ---------------------------------------------------------------- Export.lua line
+function Split-Lines([string]$s) {
+	$c = New-Object System.Collections.Generic.List[string]
+	$t = New-Object System.Collections.Generic.List[string]
+	$i = 0
+	while ($i -lt $s.Length) {
+		$j = $s.IndexOf([char]10, $i)
+		if ($j -lt 0) { $c.Add($s.Substring($i)); $t.Add(""); break }
+		if ($j -gt $i -and $s[$j - 1] -eq [char]13) { $c.Add($s.Substring($i, $j - 1 - $i)); $t.Add("`r`n") }
+		else { $c.Add($s.Substring($i, $j - $i)); $t.Add("`n") }
+		$i = $j + 1
+	}
+	return @{ c = $c; t = $t }
+}
+function Is-ActiveExportLine([string]$l) {
+	$k = $l.IndexOf("--", [System.StringComparison]::Ordinal)
+	if ($k -ge 0) { $l = $l.Substring(0, $k) }
+	return ($l.IndexOf("S27MFD_Export.lua", [System.StringComparison]::OrdinalIgnoreCase) -ge 0)
+}
+function Is-OurExportLine([string]$l) {
+	return (($l.IndexOf("S27MFD_Export.lua", [System.StringComparison]::OrdinalIgnoreCase) -ge 0) -or ($l.IndexOf("Su-27 MFD (WW) add-on", [System.StringComparison]::Ordinal) -ge 0))
+}
+function Check-Export($exp) {
+	if (-not (IsFile $exp)) { return }
+	$b = [System.IO.File]::ReadAllBytes($exp)
+	if ($b.Length -ge 2 -and (($b[0] -eq 0xFF -and $b[1] -eq 0xFE) -or ($b[0] -eq 0xFE -and $b[1] -eq 0xFF))) {
+		throw ("Scripts\Export.lua is saved as UTF-16 ('Unicode') - DCS cannot read it like that.`n  Open it in Notepad, File > Save As..., Encoding UTF-8, then run this again.`n    " + $exp)
+	}
+}
+function Add-ExportLine($exp) {
+	$s = ""
+	if (IsFile $exp) { $s = ReadL1 $exp } else { Ensure-Dir ([System.IO.Path]::GetDirectoryName($exp)) }
+	$p = Split-Lines $s
+	foreach ($l in $p.c) { if (Is-ActiveExportLine $l) { return "line already there" } }
+	$nl = "`r`n"
+	if ($s.IndexOf("`r`n", [System.StringComparison]::Ordinal) -lt 0 -and $s.IndexOf([char]10) -ge 0) { $nl = "`n" }
+	if ($s.Length -eq 0) { $add = $ExpComment + $nl + $ExpLine + $nl }
+	elseif ($p.t[$p.t.Count - 1] -eq "") { $add = $nl + $nl + $ExpComment + $nl + $ExpLine }
+	else { $add = $nl + $ExpComment + $nl + $ExpLine + $nl }
+	WriteL1 $exp ($s + $add)
+	return "line added"
+}
+function Remove-ExportLine($exp) {
+	if (-not (IsFile $exp)) { return 0 }
+	$s = ReadL1 $exp
+	$p = Split-Lines $s
+	$n = $p.c.Count
+	$cnt = 0
+	$drop = New-Object bool[] ([Math]::Max($n, 1))
+	for ($i = 0; $i -lt $n; $i++) { if (Is-OurExportLine $p.c[$i]) { $drop[$i] = $true; $cnt++ } }
+	if ($cnt -eq 0) { return 0 }
+	for ($i = 1; $i -lt $n; $i++) {
+		if ($drop[$i] -and -not $drop[$i - 1] -and $p.c[$i].IndexOf("Su-27 MFD (WW) add-on", [System.StringComparison]::Ordinal) -ge 0 -and $p.c[$i - 1].Trim() -eq "") { $drop[$i - 1] = $true }
+	}
+	$last = -1
+	for ($i = 0; $i -lt $n; $i++) { if (-not $drop[$i]) { $last = $i } }
+	$noEnd = $drop[$n - 1] -and ($p.t[$n - 1] -eq "")
+	$sb = New-Object System.Text.StringBuilder
+	for ($i = 0; $i -lt $n; $i++) {
+		if ($drop[$i]) { continue }
+		[void]$sb.Append($p.c[$i])
+		if (-not ($noEnd -and $i -eq $last)) { [void]$sb.Append($p.t[$i]) }
+	}
+	WriteL1 $exp $sb.ToString()
+	return $cnt
+}
+
+
+function Do-Export($remove) {
+	if ($SavedGames -eq "" -or -not (IsDir $SavedGames)) { Say "Export.lua: Saved Games folder not given, not changed"; return }
+	$exp = J $SavedGames "Scripts\Export.lua"
+	Check-Export $exp
+	if ($remove) {
+		$n = Remove-ExportLine $exp
+		Say ("Export.lua: " + $(if ($n -gt 0) { "MFD line removed" } else { "no MFD line" }))
+	} else {
+		Say ("Export.lua: " + (Add-ExportLine $exp))
+	}
+}
 
 # ---------------------------------------------------------------- the Su-27's controls
 # every DCS install folder (not Saved Games) that has the Su-27's controls
@@ -143,6 +230,11 @@ function Do-Binds($remove) {
 }
 
 # ---------------------------------------------------------------- run
+try {
+	Do-Export ([bool]$Uninstall)
+} catch {
+	Write-Host ("  PROBLEM (Export.lua): " + $_.Exception.Message) -ForegroundColor Yellow
+}
 try {
 	Do-Binds ([bool]$Uninstall)
 } catch {

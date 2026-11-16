@@ -111,10 +111,12 @@ local ST = {
 	busy_t = nil,       -- ЗАГР pressed: reading until busy_t + LOAD_S
 	result = "go",      -- "go" / "nogo" (lamps); at the start the mission presets are in
 	ch = {ukv = 1, kv = 1},
+	ovr = {ukv = {}, kv = {}},   -- v1.2: channels set by hand on the MFD's COM page (MAN): [ch] = MHz, until the next ЗАГР
 	vol = {ukv = LDR.VOL_START, kv = LDR.VOL_START},   -- v0.4: ГРОМК knobs
 	vol_t = nil,        -- last time the volumes went to SRS
 }
 local PWR = {sw = nil, on = false, test_t = nil, tuned = false}
+local PWR_OUT = P("SU27_POWER")           -- MFD (WIP): electric power, for the MFD device
 local BAND_RADIO = {ukv = 1, kv = 2}      -- SRS radio numbers
 
 local function now() return get_model_time and get_model_time() or 0 end
@@ -177,15 +179,37 @@ local function presets()
 	if ST.loaded == 0 then return ST.mis end
 	return ST.data
 end
+-- a channel as the radios use it: the preset, or the frequency set by hand
+-- on the MFD (MAN) for that channel (no station / callsign then)
+local function chan(band, ch)
+	local o = ST.ovr[band][ch]
+	if o then return {f = o, station = "", call = ""} end
+	local p = presets()
+	return p and p[band] and p[band][ch] or nil
+end
+
+-- MFD (COM page): the radios as cockpit parameters SU27R_*
+local RP = {ukv_ch = P("SU27R_UKV_CH"), kv_ch = P("SU27R_KV_CH"), ukv_vol = P("SU27R_UKV_VOL"), kv_vol = P("SU27R_KV_VOL"),
+            ukv_f = P("SU27R_UKV_F"), kv_f = P("SU27R_KV_F"), cart = P("SU27R_CART"), list = {ukv = {}, kv = {}}}
+for c = 1, 20 do RP.list.ukv[c] = P("SU27R_UKV_F" .. c); RP.list.kv[c] = P("SU27R_KV_F" .. c) end
+local function rp_tick()
+	RP.ukv_ch:set(ST.ch.ukv); RP.kv_ch:set(ST.ch.kv)
+	RP.ukv_vol:set(ST.vol.ukv or 0); RP.kv_vol:set(ST.vol.kv or 0)
+	RP.cart:set(ST.loaded or 0)
+	for _, band in ipairs({"ukv", "kv"}) do
+		for c = 1, 20 do local q = chan(band, c); RP.list[band][c]:set((q and tonumber(q.f)) or 0) end
+		local cur = chan(band, ST.ch[band])
+		RP[band .. "_f"]:set((cur and tonumber(cur.f)) or 0)
+	end
+end
 
 -- the card shows what is loaded: rows for every channel with a frequency
 local function card_update()
-	local p = presets()
 	local list = {}
 	for _, band in ipairs({"ukv", "kv"}) do
-		local t = p and p[band] or {}
 		for ch = 1, 20 do
-			if t[ch] then list[#list + 1] = {band = band, ch = ch, c = t[ch]} end
+			local c = chan(band, ch)
+			if c then list[#list + 1] = {band = band, ch = ch, c = c} end
 		end
 	end
 	if #list > CRD_ROWS then log("card: " .. #list .. " channels, only " .. CRD_ROWS .. " rows") end
@@ -212,8 +236,7 @@ local function card_update()
 end
 
 local function tune(band)
-	local p = presets()
-	local c = p and p[band] and p[band][ST.ch[band]]
+	local c = chan(band, ST.ch[band])
 	if c then
 		srs_set(BAND_RADIO[band], c.f)
 	else
@@ -264,7 +287,7 @@ end
 local function do_load()
 	local slot = ST.sel
 	if slot == 0 then
-		ST.loaded, ST.data, ST.result = 0, nil, "go"
+		ST.loaded, ST.data, ST.result, ST.ovr = 0, nil, "go", {ukv = {}, kv = {}}
 		log("ЗАГР: МИС (mission presets" .. (ST.mis and "" or ", none received yet") .. ")")
 		card_update()
 		tune_all()
@@ -278,7 +301,7 @@ local function do_load()
 		log("ЗАГР: slot " .. slot .. " - ОТКАЗ: " .. tostring(why))
 		return
 	end
-	ST.loaded, ST.data, ST.result = slot, data, "go"
+	ST.loaded, ST.data, ST.result, ST.ovr = slot, data, "go", {ukv = {}, kv = {}}
 	log(string.format("ЗАГР: slot %d - ГОТОВ: %s (%d channels)", slot, data.name, data.n))
 	card_update()
 	if LDR.TUNE_ON_LOAD then tune_all() end
@@ -399,10 +422,12 @@ function post_initialize()
 		if type(p) == "table" and p.su27_radio_logs == true then LOG_MAX = 1000 end
 	end)
 	card_update()
-	log("Su-27 Radio (WW) 1.1 up (" .. tostring(get_aircraft_type and get_aircraft_type()) .. "), UDP " .. udp_state)
+	log("Su-27 Radio (WW) 1.2 up (" .. tostring(get_aircraft_type and get_aircraft_type()) .. "), UDP " .. udp_state)
 end
 
+local RPT = {t = -1, dirty = true}     -- COM page parameters: last time out, changed since
 function SetCommand(command, value)
+	RPT.dirty = true
 	local key = KEYS[command]
 	if key then
 		if (value or 1) > 0 then key_step(key[1], key[2], key[3]) end
@@ -425,7 +450,7 @@ function SetCommand(command, value)
 		local ch = chan_of(value)
 		if ch ~= ST.ch[band] then
 			ST.ch[band] = ch
-			if PWR.on and not PWR.test_t then tune(band) end
+				if PWR.on and not PWR.test_t then tune(band) end
 		end
 	elseif command == RAD_CMD.UKV_VOL or command == RAD_CMD.KV_VOL then
 		local band = (command == RAD_CMD.UKV_VOL) and "ukv" or "kv"
@@ -449,13 +474,54 @@ local function power_tick(t)
 		log("power at start: " .. (PWR.sw and "on" or "off (cold start)"))
 	end
 	local on = PWR.sw or (rpm ~= nil and rpm >= LDR.RPM_ON)
+	PWR_OUT:set(on and 1 or 0)            -- MFD (WIP): the same power for the MFD device
 	if on and not PWR.on then PWR.test_t = t; PWR.tuned = false end   -- lamp test
 	PWR.on = on
 	return on
 end
 
+-- v1.2: the MFD's COM page keys (MFD/mfd_device.lua, rq_tick): SU27R_REQ =
+-- number * 100 + key 1..8 (RAD_KEY 6201..6208), answered with SU27R_ACK.
+-- Key 9 / 10: the УКВ / КВ channel in use set to SU27R_REQ_F (kHz) from
+-- now on (until the next ЗАГР): radios, card and COM page
+local REQ_P, ACK_P, REQF_P = get_param_handle("SU27R_REQ"), get_param_handle("SU27R_ACK"), get_param_handle("SU27R_REQ_F")
+local MAN_RANGE = {ukv = {100, 399.975}, kv = {3.0, 10.0}}
+local function man_set(band, f)
+	local ch = ST.ch[band]
+	ST.ovr[band][ch] = f
+	log(string.format("%s channel %d set by hand: %.3f MHz", band, ch, f))
+	card_update()
+	if PWR.on and not PWR.test_t then tune(band) end
+end
+local req_last = nil
+local function req_tick()
+	local v = tonumber(REQ_P:get()) or 0
+	if req_last == nil then req_last = v; return end
+	if v == req_last or v <= 0 then return end
+	req_last = v
+	local code = v % 100
+	local key = KEYS[6200 + code]
+	if key then key_step(key[1], key[2], key[3])
+	elseif code == 9 or code == 10 then
+		local band = (code == 9) and "ukv" or "kv"
+		local f = (tonumber(REQF_P:get()) or 0) / 1000
+		local r = MAN_RANGE[band]
+		if f >= r[1] and f <= r[2] then man_set(band, f) end
+	end
+	ACK_P:set(v)
+end
+
+-- req_tick in a pcall; true when it acted on a request
+local function req_tick_ok()
+	local before = req_last
+	pcall(req_tick)
+	return before ~= req_last
+end
 function update()
 	local t = now()
+	-- the COM page's parameters (~50): 4 times a second, at once after a change
+	local done = req_tick_ok()
+	if done or RPT.dirty or t - RPT.t >= 0.25 then RPT.t, RPT.dirty = t, false; pcall(rp_tick) end
 	if not (VOL_KNOB.ukv.done and VOL_KNOB.kv.done) then knob_init() end
 	read_hook()
 	if not power_tick(t) then
