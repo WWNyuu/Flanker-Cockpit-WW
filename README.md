@@ -32,7 +32,7 @@ Working radios for the Flaming Cliffs Su-27 and J-11A in DCS World, 80s Soviet s
 
 **DTC Planner**: ROUTE tab (steerpoints with altitude and time on target, bullseye, bingo) and LINES tab, and the Su-27 part is now in English.
 
-**Fixes**: a cartridge with only a route loads on the plate.
+**Fixes**: a cartridge with only a route loads on the plate. Updated zip (16 Nov): fixes a crash to desktop when locking a target with the SA page up.
 
 ## Repository
 

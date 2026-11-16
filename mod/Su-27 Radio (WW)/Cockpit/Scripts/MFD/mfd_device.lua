@@ -30,7 +30,7 @@ local function alt_num(m)
 	return floor((m or 0) / FT / 1000 + 0.5)
 end
 local function alt_str(m)
-	if SIT.METRIC then return string.format("%.1f", (m or 0) / 1000) end
+	if SIT.METRIC then return string.format("%.1f KM", (m or 0) / 1000) end
 	return string.format("%dK", floor((m or 0) / FT / 1000 + 0.5))
 end
 
@@ -58,21 +58,26 @@ PH.__index = PH
 function PH:set(v) if v ~= self.v then self.v = v; self.h:set(v) end end
 function PH:get() return self.h:get() end
 local function P(n) return setmetatable({h = get_param_handle("S27MFD_" .. n)}, PH) end
--- text parameter: created and given a string in the same step. The page
--- draws on DCS's render thread while this file is still loading; a text
--- parameter that exists but still holds the number 0 crashes DCS
--- (access violation in ceStringPoly, v0.3.0 / v0.3.1)
-local function PT(n)
-	local h = P(n)
-	h:set("")
-	return h
-end
--- a text for a "%s" field: never number-like ("40", "1e5", " 7"), else
--- DCS would store it as a number and crash on the "%s"
+-- a text for a "%s" field: never number-like ("40", "8.6", "1e5", " 7"),
+-- else DCS stores it as a number and crashes on the "%s" (access violation
+-- in ceStringPoly::set_strcat_by_predefined_format)
 local function safe_text(v)
 	v = tostring(v or "")
 	if tonumber(v) then v = "'" .. v end
 	return v
+end
+-- text parameter: created and given a string in the same step (the page
+-- draws on DCS's render thread while this file is still loading; a text
+-- parameter that still holds the number 0 crashes DCS). v1.2: every
+-- value set on a text parameter goes through safe_text, whatever the page
+local PHT = {}
+PHT.__index = PHT
+function PHT:set(v) v = safe_text(v); if v ~= self.v then self.v = v; self.h:set(v) end end
+function PHT:get() return self.h:get() end
+local function PT(n)
+	local h = setmetatable({h = get_param_handle("S27MFD_" .. n)}, PHT)
+	h:set("")
+	return h
 end
 -- the page stays hidden until this is 1 (set when everything is ready)
 local READY = get_param_handle("S27MFD_READY")
@@ -1829,7 +1834,11 @@ local function row(i, txt, col, box)
 	r.txt:set(safe_text(txt)); r.col:set(col or 1); r.box:set(box and 1 or 0)
 end
 local function rng_txt(m) return string.format("%d", floor(m / NM + 0.5)) end
-local function alt_txt(m) return alt_str(m) end
+-- altitude inside a longer row (no unit: the rows say it)
+local function alt_txt(m)
+	if SIT.METRIC then return string.format("%.1f", (m or 0) / 1000) end
+	return alt_str(m)
+end
 local function spd_txt(ms) return string.format("%d", floor((ms or 0) * SIT.SPD_K + 0.5)) end
 local function clock_txt(s)
 	if not s then return "--:--:--" end
