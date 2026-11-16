@@ -91,3 +91,50 @@ local function volume_knob(hint, cmd, arg)
 end
 elements["RAD_VUKV_CLICK"] = volume_knob(_("УКВ ГРОМК - R-800 volume (SRS radio 1)"), RAD_CMD.UKV_VOL, 805)
 elements["RAD_VKV_CLICK"]  = volume_knob(_("КВ ГРОМК - R-864 volume (SRS radio 2)"), RAD_CMD.KV_VOL, 806)
+
+-- MFD (WIP): 20 soft keys (arguments 811-830 press them in), ВКЛ (831),
+-- the ЯРК and ДЕНЬ / НОЧЬ rockers (each half its own spot). Boxes:
+-- MFD_OSB_<L|B|R|T><1-5>_CLICK, MFD_PWR_CLICK, MFD_BRT_UP/DN_CLICK,
+-- MFD_DN_D/N_CLICK.
+local function mfd_button(hint, cmd, arg)
+	return {
+		class               = {class_type.BTN},
+		hint                = hint,
+		device              = devices.MFD,
+		action              = {cmd},
+		stop_action         = {cmd},
+		arg                 = {arg},
+		arg_value           = {1},
+		arg_lim             = {{0, 1}},
+		updatable           = true,
+		use_release_message = {true},
+		use_OBB             = true,
+	}
+end
+local OSB_SIDES = {{"L", _("left")}, {"B", _("bottom")}, {"R", _("right")}, {"T", _("top")}}
+for s_, side in ipairs(OSB_SIDES) do
+	for i = 1, 5 do
+		local n = (s_ - 1) * 5 + i
+		elements["MFD_OSB_" .. side[1] .. i .. "_CLICK"] =
+			mfd_button(_("MFD") .. " " .. side[2] .. " " .. i, MFD_CMD.OSB0 + n, 810 + n)
+	end
+end
+elements["MFD_PWR_CLICK"]    = mfd_button(_("MFD ВКЛ - power (press: on, hold 2 s: off)"), MFD_CMD.PWR, 831)
+elements["MFD_BRT_UP_CLICK"] = mfd_button(_("MFD ЯРК + (brighter)"), MFD_CMD.BRT_UP, 832)
+elements["MFD_BRT_DN_CLICK"] = mfd_button(_("MFD ЯРК - (dimmer)"), MFD_CMD.BRT_DN, 833)
+elements["MFD_DN_D_CLICK"]   = mfd_button(_("MFD ДЕНЬ (day)"), MFD_CMD.DAY, 834)
+elements["MFD_DN_N_CLICK"]   = mfd_button(_("MFD НОЧЬ (night)"), MFD_CMD.NIGHT, 835)
+
+-- MFD (WIP): ED's ЦЕЛИ / ИСТРЕБИТЕЛИ keypad (right console) types into the
+-- MFD. ED's keys do not move; arguments 841-857 are spare.
+local KP_KEYS = {
+	{"C1", _("1")}, {"C2", _("2")}, {"C3", _("3")}, {"C4", _("4")}, {"C5", _("5")},
+	{"C6", _("6")}, {"C7", _("7")}, {"C8", _("8")}, {"C9", _("9")}, {"C10", _("10 (0)")},
+	{"ENT", _("ВВОД (enter)")}, {"RST", _("СБРОС (clear)")},
+	{"F1", _("ИСТРЕБИТЕЛИ 1")}, {"F2", _("ИСТРЕБИТЕЛИ 2")}, {"F3", _("ИСТРЕБИТЕЛИ 3")}, {"F4", _("ИСТРЕБИТЕЛИ 4")},
+	{"GR", _("ГР")},
+}
+for k, key in ipairs(KP_KEYS) do
+	local e = mfd_button(_("MFD keypad") .. " " .. key[2], KP_CMD[key[1]], 840 + k)
+	elements["KP_" .. key[1] .. "_CLICK"] = e
+end

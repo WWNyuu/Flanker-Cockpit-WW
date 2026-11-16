@@ -18,3 +18,24 @@ RAD_KEY = {
 	UKV_VOL_UP = 6205, UKV_VOL_DN = 6206,
 	KV_VOL_UP  = 6207, KV_VOL_DN  = 6208,
 }
+
+-- MFD (WIP): clickable spots of the MFD (Shapes\SU27_LDR.edm, MFD_*_CLICK)
+-- and of ED's ЦЕЛИ / ИСТРЕБИТЕЛИ keypad on the right console (KP_*_CLICK)
+MFD_CMD = {
+	OSB0  = 3300,   -- + 1..20: soft keys L1-L5, B1-B5, R1-R5, T1-T5 (1 = pressed, 0 = released)
+	PWR   = 3321,   -- ВКЛ: press = on, hold 2 s = off
+	BRT_UP = 3322, BRT_DN = 3323,   -- ЯРК rocker
+	DAY   = 3324, NIGHT = 3325,     -- ДЕНЬ / НОЧЬ rocker
+}
+KP_CMD = {
+	C1 = 3331, C2 = 3332, C3 = 3333, C4 = 3334, C5 = 3335, C6 = 3336, C7 = 3337, C8 = 3338, C9 = 3339, C10 = 3340,
+	ENT = 3341, RST = 3342, F1 = 3343, F2 = 3344, F3 = 3345, F4 = 3346, GR = 3347,
+}
+-- MFD (WIP) binds, Options > Controls (installer\su27radio_binds.lua)
+MFD_KEY = {
+	OSB0  = 6210,   -- + 1..20: soft keys L1-L5, B1-B5, R1-R5, T1-T5
+	PWR   = 6231,
+	BRT_UP = 6232, BRT_DN = 6233,
+	DAY   = 6234, NIGHT = 6235,
+	STOW  = 6236,   -- fold the MFD away / back (ED's HDD shows when it is away)
+}

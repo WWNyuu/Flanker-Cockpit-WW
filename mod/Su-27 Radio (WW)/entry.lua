@@ -1,5 +1,5 @@
 -----------------------------------------------
--- Su-27 Radio (WW) 1.0 - data loader plate (ВВОД ДАННЫХ), УКВ / КВ radio panel (channel and volume) and channel card for the
+-- Su-27 Radio (WW) 1.2 - data loader plate (ВВОД ДАННЫХ), УКВ / КВ radio panel (channel and volume), channel card and MFD for the
 -- Flaming Cliffs Su-27 / J-11A. Hooks into the jet the same way the
 -- F-15C SIT (WW) add-on hooks into the F-15C: add_plugin_systems().
 -----------------------------------------------
@@ -11,10 +11,10 @@ declare_plugin("su27_radio",
 	displayName      = _("Su-27 Radio (WW)"),
 	shortName        = "su27_radio",
 	fileMenuName     = "su27_radio",
-	version          = "1.1.0",
+	version          = "1.2.0",
 	state            = "installed",
 	developerName    = "nyuu",
-	info             = "Data loader plate and radio presets for the Flaming Cliffs Su-27",
+	info             = "Data loader plate, radio presets and a retrofit MFD for the Flaming Cliffs Su-27",
 	binaries         = {},
 	load_immediately = true,
 	Options =

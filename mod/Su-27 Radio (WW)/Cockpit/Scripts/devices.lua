@@ -7,3 +7,4 @@ end
 
 devices = {}
 devices["LDR"] = counter()
+devices["MFD"] = counter()       -- v1.2 (WIP): the MFD over the HDD

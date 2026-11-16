@@ -82,6 +82,7 @@ function LDR_DTC.read(path)
 			end
 		end
 	end
-	if out.n == 0 then return nil, "no usable channels" end
+	-- v1.2: a cartridge with only a route / bullseye (for the MFD) loads too
+	if out.n == 0 and not (type(d.route) == "table" and #d.route > 0) and type(d.bullseye) ~= "table" then return nil, "no usable channels" end
 	return out
 end
