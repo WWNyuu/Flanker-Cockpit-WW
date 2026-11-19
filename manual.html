@@ -172,25 +172,26 @@ td:first-child { font-family: var(--mono); color: var(--red); white-space: nowra
     <a href="./#cockpit">Cockpit</a>
     <a href="./#planner">DTC Planner</a>
     <a href="manual.html" aria-current="page">Pilot manual</a>
-    <a href="https://github.com/WWNyuu/SU27-SRS-radio-implementation/releases/download/1.2/Su-27_Radio_WW_v1.2.zip">Download v1.2</a>
+    <a href="downloads/Su-27_Radio_WW_1.3_MFI.zip">Download 1.3</a>
   </nav>
 </div></header>
 <div class="wrap man">
   <aside class="toc" aria-label="Contents"><b>Contents</b><ol><li><a href="#before-you-fly">Before you fly</a></li><li><a href="#power">Power</a></li><li><a href="#the-plate">The ВВОД ДАННЫХ plate</a></li><li><a href="#radio-panel">The УКВ / КВ radio panel</a></li><li><a href="#channel-card">The channel card</a></li><li><a href="#cartridges">Cartridges</a></li><li><a href="#mfd">The MFD</a></li><li><a href="#planner">Using the DTC Planner</a></li><li><a href="#troubleshooting">Options and troubleshooting</a></li></ol></aside>
   <article class="doc">
     <h1>Su-27 Radio Pilot Manual</h1>
-    <p class="lead2">How to fly with the Su-27 Radio (WW) add-on v1.2 in the Flaming Cliffs Su-27 and J-11A.</p>
+    <p class="lead2">How to fly with the Su-27 Radio (WW) add-on 1.3 MFI in the Flaming Cliffs Su-27, J-11A and Su-33.</p>
 <h2 id="before-you-fly">Before you fly</h2>
 
-<p>You need DCS World with the Su-27 or J-11A from Flaming Cliffs, and <a href="https://github.com/ciribob/DCS-SimpleRadioStandalone">SRS</a> for the radios. Without SRS everything works in the cockpit, but nothing gets tuned.</p>
+<p>You need DCS World with the Su-27, J-11A or Su-33 from Flaming Cliffs, and <a href="https://github.com/ciribob/DCS-SimpleRadioStandalone">SRS</a> for the radios. Without SRS everything works in the cockpit, but nothing gets tuned.</p>
 <p><strong>Install</strong></p>
 <ol>
-<li>Unzip the download so the folder sits at <code>Saved Games\DCS\Mods\tech\Su-27 Radio (WW)</code>.</li>
-<li>Double-click <code>INSTALL.bat</code> in that folder. It copies <code>su27radio_hook.lua</code> into <code>Saved Games\DCS\Scripts\Hooks</code> and the example cartridge into <code>Saved Games\DCS\DTC\Su-27</code>, puts in the MFD's export (<code>S27MFD_Export.lua</code>, its hook, and one line in <code>Scripts\Export.lua</code>), and adds the radio and MFD controls to the Su-27's controls files in the DCS install folder (the J-11A uses the same files).</li>
+<li>Close DCS and unzip the download anywhere.</li>
+<li>Double-click <code>INSTALL.bat</code> in the unzipped folder. It finds your Saved Games folder itself (also <code>DCS.openbeta</code>), copies the mod to <code>Saved Games\DCS\Mods\tech\Su-27 Radio (WW)</code>, copies <code>su27radio_hook.lua</code> into <code>Saved Games\DCS\Scripts\Hooks</code> and the example cartridge into <code>Saved Games\DCS\DTC\Su-27</code>, puts in the MFD's export (<code>S27MFD_Export.lua</code>, its hook, and one line in <code>Scripts\Export.lua</code>), and adds the radio and MFD controls for the Su-27, J-11A and Su-33 to their controls files in the DCS install folder.</li>
 <li>Start DCS. <b>Options &gt; Special &gt; Su-27 Radio</b> has the on / off switch and a debug log.</li>
 </ol>
 <p>A DCS update or repair puts ED's controls files back, and the radio controls disappear from Options &gt; Controls: run <code>INSTALL.bat</code> again. Your key assignments are kept by DCS and come back with them. If the installer can't find your DCS folder, run <code>INSTALL.bat -DcsPath "D:\DCS World"</code> from a command prompt; if Windows refuses the change (DCS in Program Files), right-click <code>INSTALL.bat</code> &gt; Run as administrator.</p>
-<p><strong>Remove:</strong> <code>UNINSTALL.bat</code> takes the hooks, the MFD export and the controls out. Then delete the folder. Your cartridges stay.</p>
+<p><strong>Update:</strong> run <code>INSTALL.bat</code> of the new package. Your DTC Planner pages, the controls backup and the remembered DCS folder stay.</p>
+<p><strong>Remove:</strong> <code>UNINSTALL.bat</code> takes the mod, the hooks, the MFD export and the controls out again. Your cartridges stay.</p>
 <h2 id="power">Power</h2>
 
 <p>The plate and the radio windows are dark until the jet has electric power: the electric power switch, or an engine running. When power comes on they run a short lamp test (88 in every window, both lamps lit), then both radios are tuned to the channels on their КАНАЛ knobs and the volumes are set.</p>
@@ -236,7 +237,31 @@ td:first-child { font-family: var(--mono); color: var(--red); white-space: nowra
 }</code></pre>
 <p><code>ukv</code> channels 1–20 at 100–399.975 MHz, <code>kv</code> channels 1–20 at 3–10 MHz. Station and callsign are only for the card; Cyrillic works.</p>
 <p><strong>МИС</strong>, the mission's presets: the radio presets set for your aircraft in the mission editor (radio 1 = УКВ, radio 2 = КВ). A slot without presets gets its group's frequency on УКВ channel 1. This needs the hook that INSTALL.bat copies.</p>
-<h2 id="mfd">The MFD (new in 1.2)</h2>
+<h2 id="su33">Su-33: the control unit</h2>
+
+<p>In the Su-33 nothing sits on ED's panels. The MFD has its own control unit on its top edge, tilted 10° toward the pilot, with:</p>
+<ul>
+<li>a keypad: 1–9, 0, <b>СБР</b> (clear) and <b>ВВОД</b> (enter), used like ED's ЦЕЛИ keypad in the Su-27;</li>
+<li>the <b>УКВ / КВ</b> radio: a КАНАЛ knob, a channel window and a ГРОМК knob for each;</li>
+<li>the cartridge loader: <b>КАССЕТА</b> knob, <b>ЗАГР</b> and the <b>ГОТОВ / ОТКАЗ</b> lamps.</li>
+</ul>
+<p>It is part of the MFD and folds away with it. The Su-33 uses the same cartridges as the Su-27 (<code>Saved Games\DCS\DTC\Su-27</code>), the same Options &gt; Special switch and the same controls categories.</p>
+
+<h2 id="mfi">The MFD in the MFI look (new in 1.3)</h2>
+
+<p>The MFD looks and works like the MFI edition of the Vitezovi MiG-29 MFD, after the real MFI-55: a light screen in a cyan frame, dark symbols.</p>
+<ul>
+<li><b>Top keys</b> pick the page group: <b>ATK, TAC, NAV, COM, SYS</b>. <b>Bottom keys</b> pick the page in it: ATK = LOFT, SMS; TAC = SA, PIC, FLT, RWR; NAV = RTE, PFD, LND, PNT, BCN; COM = UKV (R-800), KV (R-864); SYS = FUEL, DTC. A group's key takes you back to the page you last had in it.</li>
+<li><b>Side keys</b> are the page's own functions, named on the frame (black while on).</li>
+<li><b>SA</b> starts decentred: the jet low under a green range arc, the heading box on top, DCTR / CNTR on B5. Steerpoints are numbered discs (the active one red), airfields blue discs with their runway, hostiles red diamonds turning with their course, with altitude, range and Mach above. An orange arrow points to the active steerpoint.</li>
+<li><b>PFD</b>: flight instruments with flight director, ALT MAX / MIN and radar altitude. <b>LND</b>: HSI. <b>PNT</b>: route editor. <b>BCN</b>: the nearest airfields. <b>LOFT</b>: loft bombing cue.</li>
+<li>Entries (bingo, ALT MAX / MIN, heading / course, TOT, point position, MAN frequency, fighter channel): the keypad, then ВВОД; СБРОС clears.</li>
+<li>BINGO and ALT MAX / MIN show a red flashing warning on every page.</li>
+<li>Brightness as the MiG-29 MFI: 10 even steps; ДЕНЬ and НОЧЬ keep their own level.</li>
+</ul>
+<p>Back to the dark v1.2 MFD described below: set <code>SIT.MFI = false</code> in <code>Cockpit\Scripts\MFD\mfd_config.lua</code>.</p>
+
+<h2 id="mfd">The MFD, dark v1.2 look</h2>
 
 <p>A colour MFD retrofitted over the HDD, right of the front panel. Twenty soft keys round the screen (L1–L5 left, R1–R5 right, B1–B5 bottom, T1–T5 top), <b>ВКЛ</b> power (press: on, hold 2 s: off), <b>ЯРК</b> + / − brightness and <b>ДЕНЬ / НОЧЬ</b>. It runs on the jet's power and boots in a few seconds into MENU. The bottom row is the same on most pages: <b>SA, RDR, MENU, NAV, RWR</b>.</p>
 <ul>
