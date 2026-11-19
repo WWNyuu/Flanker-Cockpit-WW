@@ -1,21 +1,42 @@
-# Su-27 Radio (WW)
+# Su-27 Radio (WW) 1.3 MFI
 
-Working radios for the Flaming Cliffs Su-27 and J-11A in DCS World, 80s Soviet style: a ВВОД ДАННЫХ plate that loads radio channel cartridges, the УКВ / КВ radio panel with working КАНАЛ (channel) and ГРОМК (volume) knobs tuned in SRS, and a handwritten channel card on the canopy rail. Since 1.2: a retrofit colour MFD over the HDD with SA, NAV, COM, STORES, RWR and more.
+Working radios, radio cartridges and a retrofit MFD for the Flaming Cliffs **Su-27, J-11A and Su-33** in DCS World, 80s Soviet style: a ВВОД ДАННЫХ plate that loads radio channel cartridges, the УКВ / КВ radio panel with working КАНАЛ (channel) and ГРОМК (volume) knobs tuned in SRS, a handwritten channel card on the canopy rail, and a colour MFD in the MFI-55 look.
 
-**Website and pilot manual:** the GitHub Pages site of this repository (`index.html`, `manual.html`). The WW DTC Planner (MiG-29A, F-15C and Su-27 / J-11A) runs online at `planner/`.
+**Website and pilot manual:** the GitHub Pages site of this repository (`index.html`, `manual.html`). The WW DTC Planner (MiG-29A, F-15C and Su-27 / J-11A / Su-33) runs online at `planner/`.
 
 ## Requirements
 
-- DCS World with the Su-27 or J-11A (Flaming Cliffs)
-- SRS (DCS-SimpleRadio Standalone) for the radios
+- DCS World with the Su-27, J-11A or Su-33 (Flaming Cliffs)
+- SRS (DCS-SimpleRadio Standalone) for the radios. Without SRS everything works in the cockpit, but nothing is tuned.
 
 ## Install
 
-1. Download `Su-27_Radio_WW_v1.2.zip` from the 1.2 release (also in `downloads/`) and unzip it so the folder sits at `Saved Games\DCS\Mods\tech\Su-27 Radio (WW)`.
-2. Double-click `INSTALL.bat` in that folder. It copies the hooks (mission radio presets, MFD map data) and an example cartridge, adds the MFD's export to `Saved Games\DCS\Scripts\Export.lua`, and adds the controls (Options > Controls > Su-27 / J-11A, categories "Su-27 Radio (WW)" and "Su-27 MFD (WW)") to the Su-27's controls files in the DCS install. Run it again after a DCS update or repair.
-3. Options > Special > Su-27 Radio: on / off, a debug log, and the MFD's datalink picture, RWR page and alignment test.
+1. Close DCS.
+2. Download `downloads/Su-27_Radio_WW_1.3_MFI.zip` and unzip it anywhere.
+3. Double-click `INSTALL.bat`. It finds your Saved Games folder (also `DCS.openbeta`), copies the mod into `Mods\tech`, sets up the hooks, the MFD export and the example cartridge, and adds the controls for the Su-27, J-11A and Su-33.
 
-`UNINSTALL.bat` takes the hooks, the MFD export and the controls out again.
+After a DCS update or repair the radio controls disappear from Options > Controls: run `INSTALL.bat` again, your key assignments come back. To update, run `INSTALL.bat` of the new package. `UNINSTALL.bat` takes everything out again; your cartridges stay.
+
+## What's new in 1.3
+
+**MFD in the MFI look.** The MFD looks and works like the MFI edition of the Vitezovi MiG-29 MFD, after the real MFI-55: a light screen in a cyan frame, dark symbols.
+
+| Group | Pages (bottom row) |
+|---|---|
+| **ATK** | LOFT, SMS |
+| **TAC** | SA, PIC, FLT, RWR |
+| **NAV** | RTE, PFD, LND, PNT, BCN |
+| **COM** | UKV (R-800), KV (R-864) |
+| **SYS** | FUEL, DTC |
+
+- SA starts decentred, with numbered steerpoints, airfields with their runway and hostiles as red diamonds turning with their course.
+- New pages: PFD (flight director, ALT MAX / MIN, radar altitude), LND (HSI), PNT (route editor), BCN (nearest airfields) and LOFT.
+- BINGO and ALT MAX / MIN flash red on every page. Brightness in 10 even steps, DAY and NIGHT each keep their own level.
+- The dark v1.2 MFD is still there: `SIT.MFI = false` in `Cockpit\Scripts\MFD\mfd_config.lua`.
+
+**Su-33 support.** The whole mod works in the Su-33: MFD, radios, cartridges, channel card and controls. A control unit on top of the MFD carries the keypad, the УКВ / КВ radio and the cartridge loader; nothing is laid over ED's Su-33 panels, and the unit folds away with the MFD.
+
+**Desktop installer.** Unzip anywhere and run `INSTALL.bat`; no more copying into `Mods\tech` by hand. The DTC Planner pages come with the package.
 
 ## What's new in 1.2
 
@@ -37,10 +58,10 @@ Working radios for the Flaming Cliffs Su-27 and J-11A in DCS World, 80s Soviet s
 ## Repository
 
 - `downloads/` - the release zip
-- `mod/Su-27 Radio (WW)/` - the same add-on as source (cockpit device, indicators, hook, options, model, textures, installer, planner)
+- `mod/` - the same package unzipped: `INSTALL.bat`, `UNINSTALL.bat`, `installer/` and the add-on itself in `files/Su-27 Radio (WW)/` (cockpit device, indicators, hook, options, models, textures, Blender tools, planner)
 - `planner/` - the WW DTC Planner for the browser
 - `index.html`, `manual.html`, `img/` - the website
 
 ## Credits
 
-DCS World and the Su-27 / J-11A: Eagle Dynamics. Planner maps: Natural Earth, NOAA DEM. Handwriting: Bad Script font, Copyright 2011 The Bad Script Project Authors, SIL Open Font License 1.1. A fan-made add-on, not affiliated with Eagle Dynamics.
+DCS World and the Su-27 / J-11A / Su-33: Eagle Dynamics. Planner maps: Natural Earth, NOAA DEM. Handwriting: Bad Script font, Copyright 2011 The Bad Script Project Authors, SIL Open Font License 1.1. A fan-made add-on, not affiliated with Eagle Dynamics.
